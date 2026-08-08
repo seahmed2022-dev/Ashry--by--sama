@@ -9,13 +9,32 @@
         header { text-align: center; margin-bottom: 25px; }
         header h1 { color: var(--primary); margin-bottom: 5px; }
         .cart-bar { background: #fff; padding: 10px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); font-weight: bold; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 15px; }
-        .card { background: #fff; padding: 12px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.08); text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
-        .card img { width: 100%; height: 160px; object-fit: contain; background: #fafafa; border-radius: 8px; margin-bottom: 8px; }
-        .price { color: var(--primary); font-weight: bold; margin: 5px 0; font-size: 1.1rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .card { background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.08); text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        .price { color: var(--primary); font-weight: bold; margin: 10px 0; font-size: 1.1rem; }
         button { background: var(--primary); color: white; border: none; padding: 9px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; }
         button:hover { opacity: 0.9; }
         
+        /* تصميم أيقونة الواتساب العائمة */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 1000;
+            font-size: 14px;
+        }
+        .whatsapp-float:hover { background-color: #20ba5a; }
+
         #orderModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; text-align: right; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
         .modal-content input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
@@ -25,7 +44,7 @@
 
 <header>
     <h1>Ashry Natural</h1>
-    <p>متجر المنتجات الطبيعية والعناية الشخصية (منتجات وصور مطابقة تماماً للصور)</p>
+    <p>متجر المنتجات الطبيعية والعناية الشخصية</p>
 </header>
 
 <div class="cart-bar">
@@ -35,6 +54,11 @@
 
 <div class="grid" id="productGrid"></div>
 
+<!-- أيقونة الواتساب العائمة للاستفسارات -->
+<a href="https://wa.me/200133012749?text=مرحباً، لدي استفسار بخصوص منتجات آشري ناتشورال" class="whatsapp-float" target="_blank">
+    💬 استفسر عبر الواتساب
+</a>
+
 <div id="orderModal">
     <div class="modal-content">
         <h3 style="text-align:center; color: #d81b60; margin-top:0;">إتمام الطلب</h3>
@@ -42,112 +66,112 @@
         <input type="text" id="custName" placeholder="أدخلي اسمك الكامل" required>
         <label>العنوان بالتفصيل:</label>
         <input type="text" id="custAddress" placeholder="المدينة، المنطقة، الشارع" required>
-        <button type="button" onclick="sendToWhatsApp()" style="margin-top: 10px; background: #25d366;">إرسال عبر الواتساب</button>
+        <button type="button" onclick="sendToWhatsApp()" style="margin-top: 10px; background: #25d366;">إرسال الطلب عبر الواتساب</button>
         <button type="button" onclick="closeModal()" style="background:#777; margin-top:5px;">إلغاء</button>
     </div>
 </div>
 
 <script>
 const products = [
-    // --- العناية بالبشرة (صورة 1 - اليمين) ---
-    { name: "شامبو آشري", price: 275, img: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300" },
-    { name: "شامبو القشرة", price: 300, img: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300" },
-    { name: "بلسم آشري", price: 275, img: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300" },
-    { name: "الوصفة النوبية", price: 425, img: "https://images.unsplash.com/photo-1608248597359-f17b15a4b0b8?w=300" },
-    { name: "وصفة كارما", price: 425, img: "https://images.unsplash.com/photo-1608248597359-f17b15a4b0b8?w=300" },
-    { name: "كارما تونيك سبراي", price: 325, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "كارما تونيك إكسترا سبراي", price: 450, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "بيبي شامبو آشري", price: 275, img: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300" },
-    { name: "هير ميست - Hair Mist", price: 200, img: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=300" },
-    { name: "ليف ان - Leave In", price: 250, img: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300" },
-    { name: "هير ماسك - Hair Mask", price: 300, img: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300" },
+    // --- العناية بالشعر ---
+    { name: "شامبو آشري", price: 275 },
+    { name: "شامبو القشرة", price: 300 },
+    { name: "بلسم آشري", price: 275 },
+    { name: "الوصفة النوبية", price: 425 },
+    { name: "وصفة كارما", price: 425 },
+    { name: "كارما تونيك سبراي", price: 325 },
+    { name: "كارما تونيك إكسترا سبراي", price: 450 },
+    { name: "بيبي شامبو آشري", price: 275 },
+    { name: "هير ميست - Hair Mist", price: 200 },
+    { name: "ليف ان - Leave In", price: 250 },
+    { name: "هير ماسك - Hair Mask", price: 300 },
 
-    // --- العناية بالبشرة (صورة 1 - الوسط) ---
-    { name: "غسول الجزر", price: 250, img: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=300" },
-    { name: "الكريم المرطب", price: 250, img: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=300" },
-    { name: "سيروم الهيالورونيك", price: 450, img: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=300" },
-    { name: "مقشر القهوة", price: 250, img: "https://images.unsplash.com/photo-1563178406-4cdc2923acbc?w=300" },
-    { name: "ماسك طمي أسوان", price: 250, img: "https://images.unsplash.com/photo-1563178406-4cdc2923acbc?w=300" },
-    { name: "كريم الكولاجين", price: 250, img: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=300" },
-    { name: "سيروم حب الشباب", price: 225, img: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=300" },
-    { name: "سيروم الرموش", price: 200, img: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=300" },
-    { name: "سيروم الأظافر", price: 200, img: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=300" },
-    { name: "صن بلوك", price: 250, img: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=300" },
-    { name: "صن سكرين", price: 400, img: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=300" },
+    // --- العناية بالبشرة ---
+    { name: "غسول الجزر", price: 250 },
+    { name: "الكريم المرطب", price: 250 },
+    { name: "سيروم الهيالورونيك", price: 450 },
+    { name: "مقشر القهوة", price: 250 },
+    { name: "ماسك طمي أسوان", price: 250 },
+    { name: "كريم الكولاجين", price: 250 },
+    { name: "سيروم حب الشباب", price: 225 },
+    { name: "سيروم الرموش", price: 200 },
+    { name: "سيروم الأظافر", price: 200 },
+    { name: "صن بلوك", price: 250 },
+    { name: "صن سكرين", price: 400 },
 
-    // --- العناية بالبشرة (صورة 1 - يسار الوسط) ---
-    { name: "هاند كريم", price: 225, img: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=300" },
-    { name: "مقشر الشفاه", price: 100, img: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=300" },
-    { name: "مرطب الشفاه بالفراولة", price: 125, img: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=300" },
-    { name: "ليب بالم ستيك", price: 100, img: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=300" },
-    { name: "تنت", price: 100, img: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=300" },
-    { name: "تنت كريمي", price: 175, img: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=300" },
-    { name: "تونر الورد", price: 100, img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=300" },
-    { name: "تونر النعناع", price: 100, img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=300" },
-    { name: "تونر اللافندر", price: 125, img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=300" },
-    { name: "تونر الليمون", price: 125, img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=300" },
-    { name: "تونر الروزماري", price: 125, img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=300" },
+    // --- العناية بالبشرة (فئة أخرى) ---
+    { name: "هاند كريم", price: 225 },
+    { name: "مقشر الشفاه", price: 100 },
+    { name: "مرطب الشفاه بالفراولة", price: 125 },
+    { name: "ليب بالم ستيك", price: 100 },
+    { name: "تنت", price: 100 },
+    { name: "تنت كريمي", price: 175 },
+    { name: "تونر الورد", price: 100 },
+    { name: "تونر النعناع", price: 100 },
+    { name: "تونر اللافندر", price: 125 },
+    { name: "تونر الليمون", price: 125 },
+    { name: "تونر الروزماري", price: 125 },
 
-    // --- العناية بالجسم (صورة 1 - أقصى اليسار) ---
-    { name: "بادي يوجرت Fresh Peach", price: 250, img: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300" },
-    { name: "بادي يوجرت Naughty Coconut", price: 250, img: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300" },
-    { name: "بادي يوجرت Rose Vanilla", price: 250, img: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300" },
-    { name: "بادي يوجرت Sexy Graffiti", price: 250, img: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300" },
-    { name: "مزيل عرق للتفتيح", price: 200, img: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=300" },
-    { name: "مزيل عرق إكسترا", price: 250, img: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=300" },
-    { name: "مزيل عرق بدون رائحة", price: 250, img: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=300" },
-    { name: "زيت غير دهني - دراي أويل", price: 450, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "فوت بالم", price: 200, img: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=300" },
-    { name: "زبدة الجسم بجوز الهند", price: 275, img: "https://images.unsplash.com/photo-1563178406-4cdc2923acbc?w=300" },
-    { name: "بادي اسبلش", price: 300, img: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=300" },
+    // --- العناية بالجسم ---
+    { name: "بادي يوجرت Fresh Peach", price: 250 },
+    { name: "بادي يوجرت Naughty Coconut", price: 250 },
+    { name: "بادي يوجرت Rose Vanilla", price: 250 },
+    { name: "بادي يوجرت Sexy Graffiti", price: 250 },
+    { name: "مزيل عرق للتفتيح", price: 200 },
+    { name: "مزيل عرق إكسترا", price: 250 },
+    { name: "مزيل عرق بدون رائحة", price: 250 },
+    { name: "زيت غير دهني - دراي أويل", price: 450 },
+    { name: "فوت بالم", price: 200 },
+    { name: "زبدة الجسم بجوز الهند", price: 275 },
+    { name: "بادي اسبلش", price: 300 },
 
-    // --- الزيوت الطبيعية (صورة 2 - اليمين) ---
-    { name: "زيت اللوز الحلو", price: 150, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت الجوجوبا", price: 150, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت القهوة", price: 150, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت السعد", price: 225, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت الزيتون", price: 100, img: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300" },
-    { name: "زيت الكركديه", price: 150, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت جوز الهند", price: 120, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت الخروع", price: 120, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت الجرجير", price: 120, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت السمسم", price: 120, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت الورد", price: 150, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت بذور العنب", price: 225, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت جنين القمح", price: 125, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت الأفوكادو", price: 125, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت القرع", price: 125, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت أرجان مغربي", price: 350, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت اللافندر المقطر", price: 300, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت الليمون المقطر", price: 300, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت النعناع المقطر", price: 300, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت الورد المقطر", price: 300, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت شجرة الشاي المقطر", price: 300, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
-    { name: "زيت الروزماري المقطر", price: 350, img: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300" },
+    // --- الزيوت الطبيعية ---
+    { name: "زيت اللوز الحلو", price: 150 },
+    { name: "زيت الجوجوبا", price: 150 },
+    { name: "زيت القهوة", price: 150 },
+    { name: "زيت السعد", price: 225 },
+    { name: "زيت الزيتون", price: 100 },
+    { name: "زيت الكركديه", price: 150 },
+    { name: "زيت جوز الهند", price: 120 },
+    { name: "زيت الخروع", price: 120 },
+    { name: "زيت الجرجير", price: 120 },
+    { name: "زيت السمسم", price: 120 },
+    { name: "زيت الورد", price: 150 },
+    { name: "زيت بذور العنب", price: 225 },
+    { name: "زيت جنين القمح", price: 125 },
+    { name: "زيت الأفوكادو", price: 125 },
+    { name: "زيت القرع", price: 125 },
+    { name: "زيت أرجان مغربي", price: 350 },
+    { name: "زيت اللافندر المقطر", price: 300 },
+    { name: "زيت الليمون المقطر", price: 300 },
+    { name: "زيت النعناع المقطر", price: 300 },
+    { name: "زيت الورد المقطر", price: 300 },
+    { name: "زيت شجرة الشاي المقطر", price: 300 },
+    { name: "زيت الروزماري المقطر", price: 350 },
 
-    // --- صابون ومواد خام (صورة 2 - الوسط) ---
-    { name: "صابون مغربي", price: 225, img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=300" },
-    { name: "صابون نوبي", price: 275, img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=300" },
-    { name: "صابونة الفحم", price: 150, img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=300" },
-    { name: "صابونة القهوة", price: 150, img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=300" },
-    { name: "صابونة الكركديه", price: 150, img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=300" },
-    { name: "صابونة الأعشاب", price: 150, img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=300" },
-    { name: "صابونة الشيا وجوز الهند", price: 150, img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=300" },
-    { name: "جيل الصبار", price: 200, img: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=300" },
-    { name: "زبدة الشيا", price: 200, img: "https://images.unsplash.com/photo-1563178406-4cdc2923acbc?w=300" },
-    { name: "الحنه النوبيه", price: 225, img: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300" },
-    { name: "السدر", price: 225, img: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=300" },
+    // --- صابون ومواد خام ---
+    { name: "صابون مغربي", price: 225 },
+    { name: "صابون نوبي", price: 275 },
+    { name: "صابونة الفحم", price: 150 },
+    { name: "صابونة القهوة", price: 150 },
+    { name: "صابونة الكركديه", price: 150 },
+    { name: "صابونة الأعشاب", price: 150 },
+    { name: "صابونة الشيا وجوز الهند", price: 150 },
+    { name: "جيل الصبار", price: 200 },
+    { name: "زبدة الشيا", price: 200 },
+    { name: "الحنه النوبيه", price: 225 },
+    { name: "السدر", price: 225 },
 
-    // --- الاكسسوارات (صورة 2 - اليسار) ---
-    { name: "فوطة مايكروفايبر", price: 250, img: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=300" },
-    { name: "بونيه ساتان", price: 200, img: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=300" },
-    { name: "كيس مخدة ساتان", price: 200, img: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=300" },
-    { name: "توكة ساتان", price: 75, img: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=300" },
-    { name: "ليف مغربي", price: 175, img: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=300" },
-    { name: "فرشة شعر بامبو", price: 250, img: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300" },
-    { name: "مشط خشبي", price: 100, img: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300" },
-    { name: "Beach Bag", price: 250, img: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=300" },
-    { name: "Beauty Bag", price: 150, img: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=300" }
+    // --- الاكسسوارات ---
+    { name: "فوطة مايكروفايبر", price: 250 },
+    { name: "بونيه ساتان", price: 200 },
+    { name: "كيس مخدة ساتان", price: 200 },
+    { name: "توكة ساتان", price: 75 },
+    { name: "ليف مغربي", price: 175 },
+    { name: "فرشة شعر بامبو", price: 250 },
+    { name: "مشط خشبي", price: 100 },
+    { name: "Beach Bag", price: 250 },
+    { name: "Beauty Bag", price: 150 }
 ];
 
 let cart = [];
@@ -156,10 +180,7 @@ function renderProducts() {
     const grid = document.getElementById('productGrid');
     grid.innerHTML = products.map((p, index) => `
         <div class="card">
-            <div>
-                <img src="${p.img}" alt="${p.name}">
-                <h4 style="margin: 5px 0; font-size: 13px;">${p.name}</h4>
-            </div>
+            <h4 style="margin: 10px 0; font-size: 15px; color: #333;">${p.name}</h4>
             <div>
                 <p class="price">${p.price} EGP</p>
                 <button onclick="addToCart(${index})">إضافة إلى السلة</button>
