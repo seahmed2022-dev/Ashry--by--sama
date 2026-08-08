@@ -3,232 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <title>Ashry by سَمَا | متجر المنتجات الطبيعية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary-color: #d81b60; --whatsapp-color: #25d366; --bg-color: #fff5f8; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg-color); margin: 0; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; text-align: center; }
-        header { margin-bottom: 20px; position: relative; }
-        .admin-btn { position: absolute; top: 0; left: 0; background: none; border: none; font-size: 20px; cursor: pointer; color: #888; }
-        .admin-panel { background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 2px solid var(--primary-color); display: none; text-align: right; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .admin-panel input, .admin-panel select { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        .admin-panel button { background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .product-card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s; display: flex; flex-direction: column; justify-content: space-between; }
-        .product-card:hover { transform: translateY(-3px); }
-        .product-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
-        .price { color: var(--primary-color); font-weight: bold; font-size: 1.1rem; margin: 5px 0; }
+        :root { --primary: #d81b60; --bg: #fff5f8; }
+        body { font-family: Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        header { text-align: center; margin-bottom: 25px; }
+        header h1 { color: var(--primary); margin-bottom: 5px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 15px; }
+        .card { background: #fff; padding: 12px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.08); text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
+        .price { color: var(--primary); font-weight: bold; margin: 5px 0; font-size: 1.1rem; }
+        button { background: var(--primary); color: white; border: none; padding: 9px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; }
+        button:hover { opacity: 0.9; }
         
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 5px 25px rgba(0,0,0,0.2); }
-        .modal-content img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; }
-        .close-btn { background: #666; color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; margin-top: 15px; }
-
-        .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background: var(--whatsapp-color); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; text-decoration: none; }
+        #orderModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; text-align: right; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+        .modal-content input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <button class="admin-btn" onclick="accessAdmin()" title="لوحة التحكم">⚙️</button>
-        <h1>Ashry by سَمَا</h1>
-        <p>مندوب معتمد لمنتجات آشري الطبيعية</p>
-    </header>
+<header>
+    <h1>Ashry by سَمَا</h1>
+    <p>متجر المنتجات الطبيعية والعناية الشخصية (منتجات الصور فقط)</p>
+</header>
 
-    <div class="admin-panel" id="adminPanel">
-        <h3>لوحة تحكم المتجر</h3>
-        <label>اسم المنتج (اكتبيه بدقة):</label>
-        <input type="text" id="targetName" placeholder="مثال: زيت الروزماري المقطر">
-        <label>رابط الصورة:</label>
-        <input type="text" id="targetImg" placeholder="أدخلي رابط الصورة المباشر هنا">
-        <label>حالة التوفر:</label>
-        <select id="targetStock">
-            <option value="true">متوفر ✅</option>
-            <option value="false">غير متوفر ❌</option>
-        </select>
-        <button onclick="updateProduct()">حفظ التعديلات</button>
-    </div>
+<div class="grid" id="productGrid"></div>
 
-    <div class="products-grid" id="productGrid"></div>
-</div>
-
-<div class="modal" id="productModal">
+<div id="orderModal">
     <div class="modal-content">
-        <div id="modalImgContainer"></div>
-        <h2 id="modalName" style="margin: 10px 0;"></h2>
-        <p class="price" id="modalPrice" style="font-size: 1.3rem;"></p>
-        <p id="modalStock" style="font-weight: bold; margin: 10px 0;"></p>
-        <button class="close-btn" onclick="closeModal()">إغلاق</button>
+        <h3 style="text-align:center; color: #d81b60; margin-top:0;">تأكيد طلب المنتج</h3>
+        <form action="https://formspree.io/f/YOUR_ID_HERE" method="POST">
+            <input type="hidden" name="product_name" id="modalProdName">
+            <label>المنتج المطلوب:</label>
+            <input type="text" id="displayProdName" readonly style="background:#f4f4f4; font-weight:bold;">
+            <label>اسمك الكريم:</label>
+            <input type="text" name="customer_name" placeholder="أدخلي اسمك الكامل" required>
+            <label>رقم الموبايل / الواتساب:</label>
+            <input type="text" name="customer_phone" placeholder="أدخلي رقم التواصل" required>
+            <label>العنوان بالتفصيل:</label>
+            <input type="text" name="customer_address" placeholder="المدينة، المنطقة، الشارع" required>
+            <button type="submit" style="margin-top: 10px;">إرسال الطلب</button>
+            <button type="button" onclick="closeModal()" style="background:#777; margin-top:5px;">إلغاء</button>
+        </form>
     </div>
 </div>
-
-<a href="https://wa.me/201033012749" class="whatsapp-float" target="_blank" title="تواصل عبر الواتساب"><i class="fab fa-whatsapp"></i></a>
 
 <script>
-// القائمة المستخرجة بدقة من صور المتجر الفعلية
-const initialProducts = [
-    { name: "Moisturizing mini kit", price: 850, inStock: true, image: "" },
-    { name: "Daily kit", price: 600, inStock: true, image: "" },
-    { name: "Whitening mini kit", price: 600, inStock: true, image: "" },
-    { name: "Care & repair bundle", price: 575, inStock: true, image: "" },
-    { name: "Passio Cocos Hair Mist", price: 200, inStock: true, image: "" },
-    { name: "Blue Heaven Hair Mist", price: 200, inStock: true, image: "" },
-    { name: "Mini skin care kit", price: 525, inStock: true, image: "" },
-    { name: "Hair moisturizing kit", price: 750, inStock: true, image: "" },
-    { name: "Oud Dunes Body Splash", price: 300, inStock: true, image: "" },
-    { name: "Clay & Glow kit", price: 700, inStock: true, image: "" },
-    { name: "Passio Cocos Body Splash", price: 300, inStock: true, image: "" },
-    { name: "Sun Block - Summer Edition", price: 175, inStock: true, image: "" },
-    { name: "Summer Kit", price: 1500, inStock: true, image: "" },
-    { name: "Oud Dunes Hair Mist", price: 200, inStock: true, image: "" },
-    { name: "Midnight Orchid Body Splash", price: 300, inStock: true, image: "" },
-    { name: "Dulce Rose Body Splash", price: 300, inStock: true, image: "" },
-    { name: "Hair Treatment Mask", price: 300, inStock: true, image: "" },
-    { name: "Hand Cream - Summer Edition", price: 175, inStock: true, image: "" },
-    { name: "Healthy Hair trio kit", price: 875, inStock: true, image: "" },
-    { name: "Winter Kit", price: 1225, inStock: true, image: "" },
-    { name: "Dulce Rose Hair Mist", price: 200, inStock: true, image: "" },
-    { name: "Midnight Orchid Hair Mist", price: 200, inStock: true, image: "" },
-    { name: "Blue Heaven Body Splash", price: 300, inStock: true, image: "" },
-    { name: "Hair Kit", price: 1300, inStock: true, image: "" },
-    { name: "Olive Oil - زيت الزيتون", price: 100, inStock: true, image: "" },
-    { name: "زيت الروزماري المقطر - Rosemary Essential Oil", price: 350, inStock: true, image: "" },
-    { name: "صابون نوبي بالكركدية - Nubian Soap With Hibiscus", price: 275, inStock: true, image: "" },
-    { name: "كيس مخده ساتان - Satin Case", price: 200, inStock: true, image: "" },
-    { name: "مرطب القدم - Foot Balm", price: 200, inStock: true, image: "" },
-    { name: "زيت شجرة الشاي المقطر - Tea Tree Essential Oil", price: 300, inStock: true, image: "" },
-    { name: "Dandruff Shampoo - شامبو القشرة", price: 250, inStock: true, image: "" },
-    { name: "زيت جنين القمح - Wheat germ Oil", price: 125, inStock: true, image: "" },
-    { name: "كريم ترطيب اليدين - Hand Cream", price: 225, inStock: true, image: "" },
-    { name: "بادي يوجرت برائحة جوز الهند - Body Yogurt Naughty Coconut", price: 250, inStock: true, image: "" },
-    { name: "زبدة الجسم برائحة جوز الهند - Body Butter Coconut", price: 275, inStock: true, image: "" },
-    { name: "صابونة الاعشاب - Herbs Soap", price: 150, inStock: true, image: "" },
-    { name: "بادي يوجرت برائحة الخوخ - Yogurt Fresh Peach", price: 250, inStock: true, image: "" },
-    { name: "زيت اللافندر المقطر - Lavender Essential Oil", price: 300, inStock: true, image: "" },
-    { name: "Dry Oil", price: 450, inStock: true, image: "" },
-    { name: "زيت الليمون المقطر - Lemon Essential Oil", price: 300, inStock: true, image: "" },
-    { name: "Body Kit", price: 1050, inStock: true, image: "" },
-    { name: "زيت السمسم - Sesame Oil", price: 120, inStock: true, image: "" },
-    { name: "ماء الليمون - Lemon Water", price: 125, inStock: true, image: "" },
-    { name: "زيت النعناع المقطر - Peppermint Essential Oil", price: 300, inStock: true, image: "" },
-    { name: "Leave in Conditioner", price: 250, inStock: true, image: "" },
-    { name: "Skin Kit", price: 1275, inStock: true, image: "" },
-    { name: "زيت الورد المقطر - Rose Essential Oil", price: 300, inStock: true, image: "" },
-    { name: "زيت القرع - Pumpkin seeds oil", price: 125, inStock: true, image: "" },
-    { name: "زيت بذور العنب - Grapeseeds Oil", price: 225, inStock: true, image: "" },
-    { name: "توكه ساتان - Satin Scrunchie", price: 75, inStock: true, image: "" },
-    { name: "مشط خشبي - Hair Comb", price: 100, inStock: false, image: "" },
-    { name: "زيت الكركديه - Hibiscus Oil", price: 150, inStock: true, image: "" },
-    { name: "شامبو الاطفال - Kids Shampoo", price: 275, inStock: true, image: "" },
-    { name: "زيت اللوز الحلو - Sweet Almond Oil", price: 150, inStock: true, image: "" },
-    { name: "بادي يوجرت برائحة الروز فانيلا - Body Yogurt Rose Vanilla", price: 250, inStock: true, image: "" },
-    { name: "زيت الخروع - Castor Oil", price: 120, inStock: true, image: "" },
-    { name: "مقشر الشفاه - Lip Scrub", price: 100, inStock: true, image: "" },
-    { name: "زيت الارجان المغربي - Moroccan Argan Oil", price: 350, inStock: true, image: "" },
-    { name: "فرشاة الشعر بخشب البامبو - Hair Brush", price: 250, inStock: true, image: "" },
-    { name: "زيت الجرجير - Eruca Oil", price: 120, inStock: true, image: "" },
-    { name: "قناع الطمي الاسواني - Aswan Clay Mask", price: 250, inStock: false, image: "" },
-    { name: "واقى الشمس - Sun Screen", price: 250, inStock: false, image: "" },
-    { name: "زيت الافوكادو - Avocado Oil", price: 125, inStock: true, image: "" },
-    { name: "زيت القهوة - Coffee Oil", price: 150, inStock: true, image: "" },
-    { name: "ماء اللافندر - Lavender Water", price: 125, inStock: true, image: "" },
-    { name: "صابونة الشيا وجوز الهند - Shea and Coconut Soap", price: 150, inStock: true, image: "" },
-    { name: "صابون مغربي - Moroccan Soap", price: 225, inStock: true, image: "" },
-    { name: "مرطب الشفاه - Lip Balm", price: 125, inStock: true, image: "" },
-    { name: "مقشر القهوه - Coffee Scrub", price: 250, inStock: true, image: "" },
-    { name: "لوفه مغربي - Moroccan Loofah", price: 175, inStock: true, image: "" },
-    { name: "سيرم حب الشباب - Acne Serum", price: 225, inStock: true, image: "" },
-    { name: "واقى الشمس - Sun Block", price: 250, inStock: true, image: "" },
-    { name: "زيت السعد - Cyperus Oil", price: 225, inStock: true, image: "" },
-    { name: "سيرم الرموش - Eyelash Serum", price: 200, inStock: true, image: "" },
-    { name: "بلسم الشعر - Hair Conditioner", price: 275, inStock: true, image: "" },
-    { name: "صابونة الفحم - Charcoal Soap", price: 150, inStock: true, image: "" },
-    { name: "الوصفه النوبيه - Nubian Recipe", price: 425, inStock: true, image: "" },
-    { name: "وصفة كارما - Karma Recipe", price: 425, inStock: true, image: "" },
-    { name: "جيل الصبار - Aleo Vera gel", price: 200, inStock: true, image: "" },
-    { name: "كريم الكولاجين - Collagen Cream", price: 250, inStock: true, image: "" },
-    { name: "مزيل عرق اكسترا - Whitening Deodorant (Niacinamide + Vitamin C)", price: 250, inStock: true, image: "" },
-    { name: "سبراي كارما تونيك اكسترا - Karma Tonic Extra", price: 450, inStock: true, image: "" },
-    { name: "غسول الوجه بالجزر - Cleanser with Carrot", price: 250, inStock: true, image: "" },
-    { name: "شامبو الشعر - Hair Shampoo", price: 275, inStock: true, image: "" },
-    { name: "مزيل عرق للتفتيح - Whitening Deodorant (Niacinamide)", price: 200, inStock: true, image: "" },
-    { name: "تنت ملون الشفاه والخدود - Tint", price: 100, inStock: true, image: "" },
-    { name: "كريم مرطب سوفت اند جلو - Soft and glow Cream", price: 250, inStock: true, image: "" },
-    { name: "سبراي كارما مقوي للشعر - Karma Tonic Spray", price: 325, inStock: true, image: "" }
+const products = [
+    { name: "Hair Kit", price: 1300 },
+    { name: "Olive Oil - زيت الزيتون", price: 100 },
+    { name: "زيت الروزماري المقطر - Rosemary Essential Oil", price: 350 },
+    { name: "صابون نوبي بالكركدية - Nubian Soap With Hibiscus", price: 275 },
+    { name: "كيس مخده ساتان - Satin Case", price: 200 },
+    { name: "مرطب القدم - Foot Balm", price: 200 },
+    { name: "زيت شجرة الشاي المقطر - Tea Tree Essential Oil", price: 300 },
+    { name: "Dandruff Shampoo - شامبو القشرة", price: 250 },
+    { name: "زيت جنين القمح - Wheat germ Oil", price: 125 },
+    { name: "كريم ترطيب اليدين - Hand Cream", price: 225 },
+    { name: "بادي يوجرت برائحة جوز الهند - Body Yogurt Naughty Coconut", price: 250 },
+    { name: "زبدة الجسم برائحة جوز الهند - Body Butter Coconut", price: 275 },
+    { name: "صابونة الاعشاب - Herbs Soap", price: 150 },
+    { name: "بادي يوجرت برائحة الخوخ - Yogurt Fresh Peach", price: 250 },
+    { name: "زيت اللافندر المقطر - Lavender Essential Oil", price: 300 },
+    { name: "Dry Oil", price: 450 },
+    { name: "زيت الليمون المقطر - Lemon Essential Oil", price: 300 },
+    { name: "Body Kit", price: 1050 },
+    { name: "زيت السمسم - Sesame Oil", price: 120 },
+    { name: "ماء الليمون - Lemon Water", price: 125 },
+    { name: "زيت النعناع المقطر - Peppermint Essential Oil", price: 300 },
+    { name: "Leave in Conditioner", price: 250 },
+    { name: "Skin Kit", price: 1275 },
+    { name: "زيت الورد المقطر - Rose Essential Oil", price: 300 },
+    { name: "Pumpkin seeds oil - زيت القرع", price: 125 },
+    { name: "Grapeseeds Oil - زيت بذور العنب", price: 225 },
+    { name: "توكه ساتان - Satin Scrunchie", price: 75 },
+    { name: "مشط خشبي - Hair Comb", price: 100 },
+    { name: "Hibiscus Oil - زيت الكركديه", price: 150 },
+    { name: "Kids Shampoo - شامبو الاطفال", price: 275 },
+    { name: "Sweet Almond Oil - زيت اللوز الحلو", price: 150 },
+    { name: "Body Yogurt Rose Vanilla - بادي يوجرت برائحة الروز فانيلا", price: 250 },
+    { name: "Castor Oil - زيت الخروع", price: 120 },
+    { name: "Lip Scrub - مقشر الشفاه", price: 100 },
+    { name: "Moroccan Argan Oil - زيت الارجان المغربي", price: 350 },
+    { name: "Hair Brush - فرشاة الشعر بخشب البامبو", price: 250 },
+    { name: "Eruca Oil - زيت الجرجير", price: 120 },
+    { name: "Aswan Clay Mask - قناع الطمي الاسواني", price: 250 },
+    { name: "Sun Screen - واقى الشمس", price: 250 },
+    { name: "Avocado Oil - زيت الافوكادو", price: 125 },
+    { name: "Coffee Oil - زيت القهوة", price: 150 },
+    { name: "Lavender Water - ماء اللافندر", price: 125 },
+    { name: "Shea and Coconut Soap - صابونة الشيا وجوز الهند", price: 150 },
+    { name: "Moroccan Soap - صابون مغربي", price: 225 },
+    { name: "Lip Balm - مرطب الشفاه", price: 125 },
+    { name: "Coffee Scrub - مقشر القهوه", price: 250 },
+    { name: "Moroccan Loofah - لوفه مغربي", price: 175 },
+    { name: "Acne Serum - سيرم حب الشباب", price: 225 },
+    { name: "Cyperus Oil - زيت السعد", price: 225 },
+    { name: "Eyelash Serum - سيرم الرموش", price: 200 },
+    { name: "Hair Conditioner - بلسم الشعر", price: 275 },
+    { name: "Charcoal Soap - صابونة الفحم", price: 150 },
+    { name: "Nubian Recipe - الوصفه النوبيه", price: 425 },
+    { name: "Karma Recipe - وصفة كارما", price: 425 },
+    { name: "Aleo Vera gel - جيل الصبار", price: 200 },
+    { name: "Collagen Cream - كريم الكولاجين", price: 250 },
+    { name: "Whitening Deodorant (Niacinamide + Vitamin C) - مزيل عرق اكسترا", price: 250 },
+    { name: "Karma Tonic Extra - سبراي كارما تونيك اكسترا", price: 450 },
+    { name: "Cleanser with Carrot - غسول الوجه بالجزر", price: 250 },
+    { name: "Hair Shampoo - شامبو الشعر", price: 275 },
+    { name: "Whitening Deodorant (Niacinamide) - مزيل عرق للتفتيح", price: 200 },
+    { name: "Tint - تنت ملون الشفاه والخدود", price: 100 },
+    { name: "Soft and glow Cream - كريم مرطب سوفت اند جلو", price: 250 },
+    { name: "Karma Tonic Spray - سبراي كارما مقوي للشعر", price: 325 },
+    { name: "Moisturizing mini kit", price: 850 },
+    { name: "Daily kit", price: 600 },
+    { name: "Whitening mini kit", price: 600 },
+    { name: "Care & repair bundle", price: 575 },
+    { name: "Passio Cocos Hair Mist", price: 200 },
+    { name: "Blue Heaven Hair Mist", price: 200 },
+    { name: "Mini skin care kit", price: 525 },
+    { name: "Hair moisturizing kit", price: 750 },
+    { name: "Oud Dunes Body Splash", price: 300 },
+    { name: "Clay & Glow kit", price: 700 },
+    { name: "Passio Cocos Body Splash", price: 300 },
+    { name: "Sun Block - Summer Edition", price: 175 },
+    { name: "Summer Kit", price: 1500 },
+    { name: "Oud Dunes Hair Mist", price: 200 },
+    { name: "Midnight Orchid Body Splash", price: 300 },
+    { name: "Dulce Rose Body Splash", price: 300 },
+    { name: "Hair Treatment Mask", price: 300 },
+    { name: "Hand Cream - Summer Edition", price: 175 },
+    { name: "Healthy Hair trio kit", price: 875 },
+    { name: "Winter Kit", price: 1225 },
+    { name: "Dulce Rose Hair Mist", price: 200 },
+    { name: "Midnight Orchid Hair Mist", price: 200 },
+    { name: "Blue Heaven Body Splash", price: 300 },
+    { name: "زيت الجوجوبا - Jojoba Oil", price: 150 },
+    { name: "سيروم الهيالورونيك - Hyaluronic Acid Serum", price: 450 },
+    { name: "صابونة القهوة - Coffee Soap", price: 150 }
 ];
 
-let products = JSON.parse(localStorage.getItem('myStoreProductsCorrect')) || initialProducts;
-
-function render() {
+function renderProducts() {
     const grid = document.getElementById('productGrid');
-    grid.innerHTML = products.map((p, index) => `
-        <div class="product-card" onclick="openModal(${index})">
+    grid.innerHTML = products.map(p => `
+        <div class="card">
             <div>
-                ${p.image ? `<img src="${p.image}" alt="${p.name}">` : `<div style="height:180px; background:#fce4ec; display:flex; align-items:center; justify-content:center; border-radius:10px; margin-bottom:10px; color:#d81b60; font-size:14px;">بدون صورة</div>`}
-                <h3>${p.name}</h3>
+                <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=300" alt="${p.name}">
+                <h4 style="margin: 5px 0; font-size: 13px;">${p.name}</h4>
             </div>
             <div>
                 <p class="price">${p.price} EGP</p>
-                <span style="font-size: 12px; color: ${p.inStock ? 'green' : 'red'}; font-weight: bold;">
-                    ${p.inStock ? 'متوفر' : 'غير متوفر'}
-                </span>
+                <button onclick="openOrderModal('${p.name.replace(/'/g, "\\'")}')">طلب المنتج</button>
             </div>
         </div>
     `).join('');
 }
 
-function accessAdmin() {
-    let pass = prompt("أدخلي كلمة السر الخاصة بالتعديل:");
-    if (pass === "1234") {
-        const panel = document.getElementById('adminPanel');
-        panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-    } else if (pass !== null) {
-        alert("كلمة السر غير صحيحة!");
-    }
-}
-
-function updateProduct() {
-    const name = document.getElementById('targetName').value.trim();
-    const img = document.getElementById('targetImg').value.trim();
-    const inStock = document.getElementById('targetStock').value === 'true';
-
-    const prod = products.find(p => p.name === name);
-    if (prod) {
-        prod.image = img;
-        prod.inStock = inStock;
-        localStorage.setItem('myStoreProductsCorrect', JSON.stringify(products));
-        render();
-        alert("تم تحديث المنتج بنجاح!");
-    } else {
-        alert("اسم المنتج غير متطابق، تأكدي من كتابته تماماً كما هو في القائمة.");
-    }
-}
-
-function openModal(index) {
-    const p = products[index];
-    document.getElementById('modalName').innerText = p.name;
-    document.getElementById('modalPrice').innerText = p.price + " EGP";
-    
-    const stockEl = document.getElementById('modalStock');
-    stockEl.innerText = p.inStock ? "الحالة: متوفر ✅" : "الحالة: غير متوفر ❌";
-    stockEl.style.color = p.inStock ? "green" : "red";
-
-    const imgContainer = document.getElementById('modalImgContainer');
-    if (p.image) {
-        imgContainer.innerHTML = `<img src="${p.image}" alt="${p.name}">`;
-    } else {
-        imgContainer.innerHTML = `<div style="height:200px; background:#fce4ec; display:flex; align-items:center; justify-content:center; border-radius:10px; margin-bottom:15px; color:#d81b60;">لا توجد صورة مضافة بعد</div>`;
-    }
-
-    document.getElementById('productModal').style.display = 'flex';
+function openOrderModal(productName) {
+    document.getElementById('modalProdName').value = productName;
+    document.getElementById('displayProdName').value = productName;
+    document.getElementById('orderModal').style.display = 'flex';
 }
 
 function closeModal() {
-    document.getElementById('productModal').style.display = 'none';
+    document.getElementById('orderModal').style.display = 'none';
 }
 
-render();
+renderProducts();
 </script>
 </body>
 </html>
