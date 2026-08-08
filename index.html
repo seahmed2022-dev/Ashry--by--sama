@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ashry by سَمَا</title>
+    <title>Ashry by سَمَا 🌸</title>
+    <!-- مكتبة الأيقونات لتصميم أنيق بدون صور -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-pink: #ff4081;
             --soft-pink: #f8bbd0;
             --light-bg-pink: #fff0f5;
-            --card-pink-border: #f8bbd0;
             --dark-pink-text: #880e4f;
             --card-bg: #ffffff;
-            --out-of-stock: #e63946;
+            --whatsapp-green: #25d366;
         }
 
         * {
@@ -27,6 +28,7 @@
             color: #333;
             padding: 20px;
             direction: rtl;
+            padding-bottom: 80px;
         }
 
         .container {
@@ -36,7 +38,7 @@
 
         header {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
             padding: 25px 20px;
             background: linear-gradient(135deg, #ffffff 0%, #fce4ec 100%);
             border-radius: 16px;
@@ -46,26 +48,15 @@
 
         .main-title {
             color: var(--primary-pink);
-            font-size: 2.3rem;
+            font-size: 2.2rem;
             margin-bottom: 8px;
             font-weight: 800;
         }
 
         .subtitle {
             color: var(--dark-pink-text);
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .sync-info {
-            font-size: 0.85rem;
-            color: #777;
-            background-color: #fff;
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            border: 1px dashed var(--primary-pink);
         }
 
         .controls {
@@ -73,14 +64,14 @@
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .filter-btn {
             background-color: var(--card-bg);
             border: 2px solid var(--primary-pink);
             color: var(--primary-pink);
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
@@ -90,7 +81,7 @@
         .filter-btn.active, .filter-btn:hover {
             background-color: var(--primary-pink);
             color: white;
-            box-shadow: 0 4px 12px rgba(255, 64, 129, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 64, 129, 0.2);
         }
 
         .products-grid {
@@ -104,13 +95,12 @@
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(255, 64, 129, 0.08);
+            border: 1.5px solid var(--soft-pink);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            position: relative;
-            border: 1.5px solid var(--card-pink-border);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer;
         }
 
         .product-card:hover {
@@ -119,25 +109,26 @@
             border-color: var(--primary-pink);
         }
 
-        .product-image-wrapper {
+        .product-image-box {
             width: 100%;
-            height: 220px;
-            background-color: #fff;
+            height: 160px;
+            background: linear-gradient(135deg, #fff 0%, #fce4ec 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
             border-bottom: 1px solid var(--soft-pink);
+            color: var(--primary-pink);
+            font-size: 3rem;
         }
 
-        .product-image {
+        .product-image-box img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
         .product-info {
-            padding: 18px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
@@ -145,54 +136,32 @@
         }
 
         .product-category {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--dark-pink-text);
             font-weight: 600;
-            text-transform: uppercase;
         }
 
         .product-title {
-            font-size: 1.05rem;
-            margin: 8px 0;
+            font-size: 1rem;
+            margin: 6px 0;
             font-weight: 700;
-            color: #222;
+            color: #333;
         }
 
         .product-price {
             font-size: 1.2rem;
             color: var(--primary-pink);
-            font-weight: 800;
-        }
-
-        .status-badge {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 0.75rem;
             font-weight: bold;
-            z-index: 2;
+            margin-top: 8px;
         }
 
-        .in-stock {
-            background-color: rgba(232, 245, 233, 0.95);
-            color: #2e7d32;
-        }
-
-        .out-of-stock {
-            background-color: rgba(255, 235, 238, 0.95);
-            color: var(--out-of-stock);
-        }
-
-        /* Modal Styles */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.5);
             display: none;
             justify-content: center;
             align-items: center;
@@ -203,12 +172,10 @@
         .modal-content {
             background: white;
             border-radius: 20px;
-            max-width: 500px;
+            max-width: 450px;
             width: 100%;
             padding: 25px;
             position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             border: 2px solid var(--soft-pink);
         }
@@ -228,83 +195,72 @@
             font-weight: bold;
         }
 
-        .modal-img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 15px;
-        }
-
-        .modal-title {
-            color: var(--dark-pink-text);
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-        }
-
-        .modal-price {
-            font-size: 1.3rem;
-            color: var(--primary-pink);
-            font-weight: 800;
-            margin-bottom: 15px;
-        }
-
-        .action-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn-whatsapp {
+        .btn-action {
             display: block;
-            text-align: center;
-            background-color: #25d366;
-            color: white;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 0.95rem;
-        }
-
-        .btn-web-order {
-            background-color: var(--primary-pink);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
             width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 25px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
         }
 
-        .web-form {
+        .btn-wa { background: var(--whatsapp-green); color: white; }
+        .btn-web { background: var(--primary-pink); color: white; }
+
+        .order-form {
             display: none;
             margin-top: 15px;
             padding-top: 15px;
             border-top: 1px dashed var(--soft-pink);
         }
 
-        .web-form input, .web-form textarea {
+        .order-form input {
             width: 100%;
             padding: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             border: 1px solid var(--soft-pink);
             border-radius: 8px;
             font-family: inherit;
         }
 
-        .submit-order-btn {
-            background-color: var(--dark-pink-text);
+        .btn-submit {
+            background: var(--dark-pink-text);
             color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
             width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
+        }
+
+        /* أيقونة الواتساب العائمة مثبتة على اليمين بالأسفل */
+        .floating-wa-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--whatsapp-green);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-decoration: none;
+            z-index: 999;
+            transition: transform 0.3s ease;
+        }
+
+        .floating-wa-btn:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -314,7 +270,6 @@
     <header>
         <h1 class="main-title">Ashry by سَمَا 🌸</h1>
         <h2 class="subtitle">مندوب معتمد لبراند عشري</h2>
-        <div class="sync-info">اضغطي على أي منتج لعرض التفاصيل وتحديد طريقة الطلب ✨</div>
     </header>
 
     <div class="controls">
@@ -329,63 +284,62 @@
     <div class="products-grid" id="productsGrid"></div>
 </div>
 
-<!-- Modal Dialog -->
 <div class="modal-overlay" id="productModal">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">✕</button>
-        <img id="modalImg" src="" class="modal-img" alt="صورة المنتج">
-        <h3 id="modalTitle" class="modal-title"></h3>
-        <div id="modalPrice" class="modal-price"></div>
+        <h3 id="modalTitle" style="color: var(--dark-pink-text); margin-bottom: 8px;"></h3>
+        <p id="modalPrice" style="color: var(--primary-pink); font-weight: bold; font-size: 1.2rem; margin-bottom: 15px;"></p>
 
-        <div class="action-buttons">
-            <a id="modalWhatsapp" href="#" target="_blank" class="btn-whatsapp">طلب عبر الواتساب 💬</a>
-            <button class="btn-web-order" onclick="toggleWebForm()">الطلب المباشر من الويب سايت 🛒</button>
-        </div>
+        <a id="modalWaBtn" href="#" target="_blank" class="btn-action btn-wa">طلب عبر الواتساب <i class="fab fa-whatsapp"></i></a>
+        <button class="btn-action btn-web" onclick="toggleForm()">طلب مباشر من الويب سايت 🛒</button>
 
-        <form id="webForm" class="web-form" onsubmit="handleFormSubmit(event)">
+        <form id="webForm" class="order-form" onsubmit="submitOrder(event)">
             <input type="text" id="custName" placeholder="الاسم بالكامل" required>
             <input type="tel" id="custPhone" placeholder="رقم الهاتف" required>
-            <textarea id="custAddress" placeholder="العنوان التفصيلي للشحن" rows="2" required></textarea>
-            <button type="submit" class="submit-order-btn">تأكيد الطلب الآن</button>
+            <input type="text" id="custAddress" placeholder="العنوان التفصيلي" required>
+            <button type="submit" class="btn-submit">تأكيد الطلب</button>
         </form>
     </div>
 </div>
 
+<!-- زر الواتساب العائم بالأسفل مدمج به رقمك مباشرة -->
+<a href="https://wa.me/201033012749?text=مرحباً%20سما،%20عايزة%20أستفسر%20عن%20منتجات%20عشري" class="floating-wa-btn" target="_blank" title="تواصل معنا عبر الواتساب">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
 <script>
-const rawProductsList = [
-    { name: "غسول الوجه بالجزر - Facial Cleanser with Carrot", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Carrot-Facial-Cleanser.jpg" },
-    { name: "مزيل عرق للتفتيح - Whitening Deodorant", price: 200, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Deodorant.jpg" },
-    { name: "مزيل عرق اكسترا - Extra Whitening Deodorant", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Extra-Deodorant.jpg" },
-    { name: "مزيل عرق بدون رائحة - Unscented Deodorant", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Unscented-Deodorant.jpg" },
-    { name: "سيرم الهيالورونيك - Hyaluronic Acid Serum", price: 450, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Hyaluronic-Acid.jpg" },
-    { name: "سيرم حب الشباب - Acne Serum", price: 225, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Acne-Serum.jpg" },
-    { name: "كريم ترطيب اليدين - Hand Cream", price: 225, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Hand-Cream.jpg" },
-    { name: "كريم مرطب سوفت اند جلو - Soft and glow Cream", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Soft-and-Glow.jpg" },
-    { name: "كريم الكولاجين - Collagen Cream", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Collagen-Cream.jpg" },
-    { name: "مرطب القدم - Foot Balm", price: 200, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Foot-Balm.jpg" },
-    { name: "بادي يوجرت برائحة جوز الهند - Body Yogurt Naughty Coconut", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Body-Yogurt-Coconut.jpg" },
-    { name: "بادي يوجرت برائحة الخوخ - Body Yogurt Fresh Peach", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Body-Yogurt-Peach.jpg" },
-    { name: "بادي يوجرت برائحة الروز فانيلا - Body Yogurt Rose Vanilla", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Body-Yogurt-Rose-Vanilla.jpg" },
-    { name: "زبدة الجسم برائحة جوز الهند - Body Butter Coconut", price: 275, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Body-Butter.jpg" },
-    { name: "مقشر القهوه - Coffee Scrub", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Coffee-Scrub.jpg" },
-    { name: "واقى الشمس - Sun Block", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Sunblock.jpg" },
+// رقم الواتساب المباشر الخاص بكِ بالصيغة الدولية
+const myPhoneNumber = "201033012749"; 
 
-    { name: "شامبو الشعر - Hair Shampoo", price: 275, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Hair-Shampoo.jpg" },
-    { name: "بلسم الشعر - Hair Conditioner", price: 275, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Hair-Conditioner.jpg" },
-    { name: "شامبو الاطفال - Kids Shampoo", price: 275, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Kids-Shampoo.jpg" },
-    { name: "الوصفه النوبيه - Nubian Recipe", price: 425, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Nubian-Recipe.jpg" },
-    { name: "وصفة كارما - Karma Recipe", price: 425, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Karma-Recipe.jpg" },
-    { name: "سبراي كارما مقوي للشعر - Karma Tonic Spray", price: 325, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Karma-Spray.jpg" },
-    { name: "جيل الصبار - Aleo Vera gel", price: 200, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Aloe-Vera.jpg" },
+const categoryIcons = {
+    "Skin Care": "fa-sparkles",
+    "Hair Care": "fa-pump-soap",
+    "Raw Products": "fa-bottle-droplet",
+    "Organic Soaps": "fa-soap",
+    "Lips Care": "fa-heart"
+};
 
-    { name: "زيت الروزماري المقطر - Rosemary Essential Oil", price: 350, category: "Raw Products", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Rosemary-Essential-Oil.jpg" },
-    { name: "ماء الروزماري - Rosemary Water", price: 125, category: "Raw Products", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Rosemary-Water.jpg" },
-    { name: "زيت الارجان المغربي - Moroccan Argan Oil", price: 350, category: "Raw Products", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Argan-Oil.jpg" },
+const productsList = [
+    { id: 1, name: "غسول الوجه بالجزر", price: 250, category: "Skin Care", image: "" },
+    { id: 2, name: "مزيل عرق للتفتيح", price: 200, category: "Skin Care", image: "" },
+    { id: 3, name: "كريم ترطيب اليدين", price: 225, category: "Skin Care", image: "" },
+    { id: 4, name: "سيرم الهيالورونيك", price: 450, category: "Skin Care", image: "" },
+    { id: 5, name: "بادي يوجرت برائحة جوز الهند", price: 250, category: "Skin Care", image: "" },
+    
+    { id: 6, name: "شامبو الشعر", price: 275, category: "Hair Care", image: "" },
+    { id: 7, name: "بلسم الشعر", price: 275, category: "Hair Care", image: "" },
+    { id: 8, name: "الوصفه النوبيه", price: 425, category: "Hair Care", image: "" },
+    { id: 9, name: "وصفة كارما", price: 425, category: "Hair Care", image: "" },
 
-    { name: "صابون نوبي بالكركدية - Nubian Soap With Hibiscus", price: 275, category: "Organic Soaps", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Nubian-Soap.jpg" },
-    { name: "صابونة الفحم - Charcoal Soap", price: 150, category: "Organic Soaps", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Charcoal-Soap.jpg" },
+    { id: 10, name: "زيت الروزماري المقطر", price: 350, category: "Raw Products", image: "" },
+    { id: 11, name: "ماء الروزماري", price: 125, category: "Raw Products", image: "" },
+    { id: 12, name: "زيت الارجان المغربي", price: 350, category: "Raw Products", image: "" },
 
-    { name: "مرطب الشفاه - Lip Balm", price: 125, category: "Lips Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Lip-Balm.jpg" }
+    { id: 13, name: "صابون نوبي بالكركدية", price: 275, category: "Organic Soaps", image: "" },
+    { id: 14, name: "صابونة الفحم", price: 150, category: "Organic Soaps", image: "" },
+
+    { id: 15, name: "مرطب الشفاه", price: 125, category: "Lips Care", image: "" },
+    { id: 16, name: "مقشر الشفاه", price: 100, category: "Lips Care", image: "" }
 ];
 
 let selectedProduct = null;
@@ -394,25 +348,25 @@ function displayProducts(products) {
     const grid = document.getElementById('productsGrid');
     grid.innerHTML = '';
 
-    products.forEach(product => {
+    products.forEach(p => {
         const card = document.createElement('div');
         card.className = 'product-card';
-        card.onclick = () => openModal(product);
+        card.onclick = () => openModal(p);
 
-        const statusClass = product.inStock ? 'in-stock' : 'out-of-stock';
-        const statusText = product.inStock ? 'متوفر' : 'غير متوفر';
+        const imageContent = p.image && p.image.trim() !== "" 
+            ? `<img src="${p.image}" alt="${p.name}">` 
+            : `<i class="fa-solid ${categoryIcons[p.category] || 'fa-spa'}"></i>`;
 
         card.innerHTML = `
-            <span class="status-badge ${statusClass}">${statusText}</span>
-            <div class="product-image-wrapper">
-                <img src="${product.image}" alt="${product.name}" class="product-image">
+            <div class="product-image-box">
+                ${imageContent}
             </div>
             <div class="product-info">
                 <div>
-                    <div class="product-category">${product.category}</div>
-                    <div class="product-title">${product.name}</div>
+                    <div class="product-category">${p.category}</div>
+                    <div class="product-title">${p.name}</div>
                 </div>
-                <div class="product-price">${product.price} EGP</div>
+                <div class="product-price">${p.price} EGP</div>
             </div>
         `;
         grid.appendChild(card);
@@ -421,13 +375,12 @@ function displayProducts(products) {
 
 function openModal(product) {
     selectedProduct = product;
-    document.getElementById('modalImg').src = product.image;
     document.getElementById('modalTitle').innerText = product.name;
     document.getElementById('modalPrice').innerText = product.price + " EGP";
-    
-    // رابط الواتساب
-    const msg = encodeURIComponent(`مرحباً سما، أود طلب منتج: ${product.name} بسعر ${product.price} ج.م`);
-    document.getElementById('modalWhatsapp').href = `https://wa.me/?text=${msg}`;
+
+    // رابط مباشر يفتح المحادثة معكِ ومعها اسم المنتج وسعره جاهزين
+    const msg = encodeURIComponent(`مرحباً سما، أود طلب: ${product.name} بسعر ${product.price} ج.م`);
+    document.getElementById('modalWaBtn').href = `https://wa.me/${myPhoneNumber}?text=${msg}`;
 
     document.getElementById('webForm').style.display = 'none';
     document.getElementById('productModal').style.display = 'flex';
@@ -437,15 +390,15 @@ function closeModal() {
     document.getElementById('productModal').style.display = 'none';
 }
 
-function toggleWebForm() {
+function toggleForm() {
     const form = document.getElementById('webForm');
     form.style.display = form.style.display === 'block' ? 'none' : 'block';
 }
 
-function handleFormSubmit(e) {
+function submitOrder(e) {
     e.preventDefault();
     const name = document.getElementById('custName').value;
-    alert(`شكراً لكِ يا ${name}! تم تسجيل طلبك لمنتج (${selectedProduct.name}) بنجاح، وسنتواصل معكِ لتأكيد الشحن.`);
+    alert(`تم استلام طلبك لمنتج (${selectedProduct.name}) بنجاح يا ${name}! وسنتواصل معكِ فوراً.`);
     closeModal();
 }
 
@@ -455,14 +408,14 @@ function filterProducts(category, evt) {
     if (evt && evt.target) evt.target.classList.add('active');
 
     if (category === 'all') {
-        displayProducts(rawProductsList);
+        displayProducts(productsList);
     } else {
-        const filtered = rawProductsList.filter(p => p.category === category);
+        const filtered = productsList.filter(p => p.category === category);
         displayProducts(filtered);
     }
 }
 
-window.addEventListener('DOMContentLoaded', () => displayProducts(rawProductsList));
+window.addEventListener('DOMContentLoaded', () => displayProducts(productsList));
 </script>
 
 </body>
