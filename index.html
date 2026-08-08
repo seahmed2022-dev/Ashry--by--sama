@@ -3,24 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قائمة منتجات Ashry Natural</title>
+    <title>Ashry by سَمَا</title>
     <style>
         :root {
-            --primary-color: #d81b60;
-            --secondary-color: #f48fb1;
-            --accent-pink: #f06292;
-            --bg-color: #fff5f8;
+            /* درجات البينك الخاصة بـ سما */
+            --primary-pink: #ff4081;
+            --soft-pink: #f8bbd0;
+            --light-bg-pink: #fff0f5;
+            --card-pink-border: #f8bbd0;
+            --dark-pink-text: #880e4f;
             --card-bg: #ffffff;
-            --text-color: #212529;
             --out-of-stock: #e63946;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
+            background-color: var(--light-bg-pink);
+            color: #333;
             padding: 20px;
+            direction: rtl;
         }
 
         .container {
@@ -28,41 +35,68 @@
             margin: 0 auto;
         }
 
+        /* الهيدر والعناوين */
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
+            padding: 25px 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #fce4ec 100%);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.1);
+            border: 2px solid var(--soft-pink);
         }
 
-        header h1 {
-            color: var(--primary-color);
+        .main-title {
+            color: var(--primary-pink);
+            font-size: 2.3rem;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: var(--dark-pink-text);
+            font-size: 1.15rem;
+            font-weight: 600;
             margin-bottom: 15px;
         }
 
+        .sync-info {
+            font-size: 0.85rem;
+            color: #777;
+            background-color: #fff;
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px dashed var(--primary-pink);
+        }
+
+        /* أزرار الفلترة */
         .controls {
             display: flex;
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .filter-btn {
             background-color: var(--card-bg);
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            padding: 8px 16px;
-            border-radius: 20px;
+            border: 2px solid var(--primary-pink);
+            color: var(--primary-pink);
+            padding: 10px 20px;
+            border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s ease;
         }
 
         .filter-btn.active, .filter-btn:hover {
-            background-color: var(--primary-color);
+            background-color: var(--primary-pink);
             color: white;
-            box-shadow: 0 4px 10px rgba(216, 27, 96, 0.25);
+            box-shadow: 0 4px 12px rgba(255, 64, 129, 0.3);
         }
 
+        /* شبكة الكروت */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -71,20 +105,21 @@
 
         .product-card {
             background-color: var(--card-bg);
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(216, 27, 96, 0.08);
+            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.08);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
-            border: 1px solid #fce4ec;
+            border: 1.5px solid var(--card-pink-border);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .product-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(216, 27, 96, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 64, 129, 0.2);
+            border-color: var(--primary-pink);
         }
 
         .product-image-wrapper {
@@ -95,7 +130,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            border-bottom: 1px solid #fce4ec;
+            border-bottom: 1px solid var(--soft-pink);
         }
 
         .product-image {
@@ -105,7 +140,7 @@
         }
 
         .product-info {
-            padding: 15px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
@@ -114,42 +149,52 @@
 
         .product-category {
             font-size: 0.8rem;
-            color: #888;
+            color: var(--dark-pink-text);
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .product-title {
-            font-size: 1rem;
+            font-size: 1.05rem;
             margin: 8px 0;
-            font-weight: 600;
+            font-weight: 700;
+            color: #222;
         }
 
         .product-price {
-            font-size: 1.15rem;
-            color: var(--primary-color);
-            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary-pink);
+            font-weight: 800;
         }
 
         .status-badge {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 4px 8px;
-            border-radius: 6px;
+            top: 12px;
+            left: 12px;
+            padding: 4px 10px;
+            border-radius: 8px;
             font-size: 0.75rem;
             font-weight: bold;
             z-index: 2;
         }
 
         .in-stock {
-            background-color: rgba(232, 245, 233, 0.9);
+            background-color: rgba(232, 245, 233, 0.95);
             color: #2e7d32;
         }
 
         .out-of-stock {
-            background-color: rgba(255, 235, 238, 0.9);
-            color: #c62828;
+            background-color: rgba(255, 235, 238, 0.95);
+            color: var(--out-of-stock);
+        }
+
+        .loading-state {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--primary-pink);
+            padding: 50px;
+            grid-column: 1 / -1;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -157,23 +202,27 @@
 
 <div class="container">
     <header>
-        <h1>منتجات Ashry Natural</h1>
-        <div class="controls">
-            <button class="filter-btn active" onclick="filterProducts('all')">الكل</button>
-            <button class="filter-btn" onclick="filterProducts('Skin Care')">العناية بالبشرة</button>
-            <button class="filter-btn" onclick="filterProducts('Hair Care')">العناية بالشعر</button>
-            <button class="filter-btn" onclick="filterProducts('Raw Products')">الزيوت والمواد الخام</button>
-            <button class="filter-btn" onclick="filterProducts('Organic Soaps')">الصابون الطبيعي</button>
-            <button class="filter-btn" onclick="filterProducts('Lips Care')">العناية بالشفاه</button>
-        </div>
+        <h1 class="main-title">Ashry by سَمَا 🌸</h1>
+        <h2 class="subtitle">مندوب معتمد لبراند عشري</h2>
+        <div id="syncStatus" class="sync-info">عرض قائم بالمنتجات المتاحة</div>
     </header>
 
-    <div class="products-grid" id="productsGrid"></div>
+    <div class="controls">
+        <button class="filter-btn active" onclick="filterProducts('all', event)">الكل</button>
+        <button class="filter-btn" onclick="filterProducts('Skin Care', event)">العناية بالبشرة</button>
+        <button class="filter-btn" onclick="filterProducts('Hair Care', event)">العناية بالشعر</button>
+        <button class="filter-btn" onclick="filterProducts('Raw Products', event)">الزيوت والمواد الخام</button>
+        <button class="filter-btn" onclick="filterProducts('Organic Soaps', event)">الصابون الطبيعي</button>
+        <button class="filter-btn" onclick="filterProducts('Lips Care', event)">العناية بالشفاه</button>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+        <div class="loading-state">جاري تحميل القائمة... ✨</div>
+    </div>
 </div>
 
 <script>
-// اتركي image: "" فارغة وسيظهر الكارت بدون صورة نهائياً.
-// ضعي رابط الصورة عندما ترغبين فقط مثل: image: "images/rosemary.jpg"
+// قائمة المنتجات الأساسية المأخوذة مباشرة من البيانات المرفقة
 const rawProductsList = [
     { name: "زيت الروزماري المقطر - Rosemary Essential Oil", price: 350, category: "Raw Products", inStock: true, image: "" },
     { name: "صابون نوبي بالكركدية - Nubian Soap With Hibiscus", price: 275, category: "Skin Care", inStock: true, image: "" },
@@ -244,22 +293,68 @@ const rawProductsList = [
     { name: "تنت ملون الشفاه والخدود - Tint", price: 100, category: "Skin Care", inStock: true, image: "" }
 ];
 
+const COMPANY_API_URL = 'https://api.company.com/v1/products';
+let globalProductsList = [];
+
 function removeDuplicates(products) {
     const uniqueMap = new Map();
     products.forEach(product => {
-        const normalizedName = product.name.trim().toLowerCase();
-        if (!uniqueMap.has(normalizedName)) {
+        const productName = product.name || product.title || '';
+        const normalizedName = productName.trim().toLowerCase();
+        if (normalizedName && !uniqueMap.has(normalizedName)) {
             uniqueMap.set(normalizedName, product);
         }
     });
     return Array.from(uniqueMap.values());
 }
 
-const productsList = removeDuplicates(rawProductsList);
+async function fetchAndSyncProducts() {
+    const syncStatus = document.getElementById('syncStatus');
+
+    // إظهار المنتجات المحلية أولاً فور فتح الصفحة
+    globalProductsList = removeDuplicates(rawProductsList);
+    displayProducts(globalProductsList);
+
+    try {
+        let response = await fetch(COMPANY_API_URL);
+
+        if (!response.ok) {
+            const proxyUrl = 'https://api.allorigins.win/raw?url=';
+            response = await fetch(proxyUrl + encodeURIComponent(COMPANY_API_URL));
+        }
+
+        if (response.ok) {
+            const rawData = await response.json();
+            const fetchedItems = Array.isArray(rawData) ? rawData : (rawData.data || rawData.products || []);
+
+            if (fetchedItems.length > 0) {
+                const formattedItems = fetchedItems.map(item => ({
+                    name: item.name || item.title || 'منتج بدون اسم',
+                    price: item.price || item.cost || 0,
+                    category: item.category || 'Skin Care',
+                    inStock: item.inStock !== undefined ? item.inStock : (item.stock > 0),
+                    image: item.image || item.image_url || ''
+                }));
+
+                globalProductsList = removeDuplicates(formattedItems);
+                const now = new Date();
+                syncStatus.innerText = 'متزامن تلقائياً مع موقع الشركة الرئيسي | آخر تحديث: ' + now.toLocaleTimeString('ar-EG');
+                displayProducts(globalProductsList);
+            }
+        }
+    } catch (error) {
+        syncStatus.innerText = 'قائمة المنتجات والأسعار الحالية (Ashry by سَمَا)';
+    }
+}
 
 function displayProducts(products) {
     const grid = document.getElementById('productsGrid');
     grid.innerHTML = '';
+
+    if (products.length === 0) {
+        grid.innerHTML = '<div class="loading-state">لا توجد منتجات متوفرة في هذا القسم.</div>';
+        return;
+    }
 
     products.forEach(product => {
         const card = document.createElement('div');
@@ -268,7 +363,6 @@ function displayProducts(products) {
         const statusClass = product.inStock ? 'in-stock' : 'out-of-stock';
         const statusText = product.inStock ? 'متوفر' : 'غير متوفر';
 
-        // إضافة عنصر الصورة فقط إذا كانت هناك صورة محددة للمنتج
         const imageHTML = (product.image && product.image.trim() !== "") 
             ? `<div class="product-image-wrapper">
                  <img src="${product.image}" alt="${product.name}" class="product-image">
@@ -290,20 +384,21 @@ function displayProducts(products) {
     });
 }
 
-function filterProducts(category) {
+function filterProducts(category, evt) {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    if (evt && evt.target) evt.target.classList.add('active');
 
     if (category === 'all') {
-        displayProducts(productsList);
+        displayProducts(globalProductsList);
     } else {
-        const filtered = productsList.filter(p => p.category === category);
+        const filtered = globalProductsList.filter(p => p.category === category);
         displayProducts(filtered);
     }
 }
 
-displayProducts(productsList);
+window.addEventListener('DOMContentLoaded', fetchAndSyncProducts);
+setInterval(fetchAndSyncProducts, 300000);
 </script>
 
 </body>
