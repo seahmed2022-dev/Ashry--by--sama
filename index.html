@@ -2,231 +2,97 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Ashry Natural | متجر المنتجات الطبيعية</title>
+    <title>Ashry Natural | المتجر الكامل</title>
     <style>
         :root { --primary: #d81b60; --bg: #fff5f8; }
         body { font-family: Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
         header { text-align: center; margin-bottom: 25px; }
-        header h1 { color: var(--primary); margin-bottom: 5px; }
-        .cart-bar { background: #fff; padding: 10px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); font-weight: bold; }
+        .cart-bar { background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 900; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .card { background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.08); text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
-        .price { color: var(--primary); font-weight: bold; margin: 8px 0; font-size: 1.1rem; }
-        
-        .stock-status { font-size: 12px; font-weight: bold; margin-bottom: 8px; padding: 3px 8px; border-radius: 4px; display: inline-block; }
-        .in-stock { background: #e8f5e9; color: #2e7d32; }
-        .out-stock { background: #ffebee; color: #c62828; }
-
-        button { background: var(--primary); color: white; border: none; padding: 9px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; }
-        button:hover { opacity: 0.9; }
+        .card { background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center; }
+        .price { color: var(--primary); font-weight: bold; margin: 8px 0; }
+        button { background: var(--primary); color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer; width: 100%; }
         button:disabled { background: #ccc; cursor: not-allowed; }
-        
-        .whatsapp-float {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background-color: #25d366;
-            color: white;
-            border-radius: 50px;
-            padding: 12px 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            z-index: 1000;
-            font-size: 14px;
-        }
-        .whatsapp-float:hover { background-color: #20ba5a; }
-
-        #orderModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; text-align: right; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-        .modal-content input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        #orderModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: white; padding: 20px; border-radius: 15px; width: 90%; max-width: 400px; }
+        input { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Ashry Natural</h1>
-    <p>متجر المنتجات الطبيعية والعناية الشخصية</p>
-</header>
+<header><h1>Ashry Natural</h1></header>
 
 <div class="cart-bar">
-    <span>🛒 سلة المشتريات: <span id="cartCount">0</span> منتج</span>
-    <button onclick="openCheckout()" style="width: auto; padding: 5px 15px;">إتمام الطلب عبر الواتساب</button>
+    <span>🛒 السلة: (<span id="cartCount">0</span>)</span>
+    <button onclick="openCheckout()" style="width: auto;">إتمام الطلب</button>
 </div>
 
 <div class="grid" id="productGrid"></div>
 
-<a href="https://wa.me/201033012749?text=مرحباً، لدي استفسار بخصوص منتجات آشري ناتشورال" class="whatsapp-float" target="_blank">
-    💬 استفسر عبر الواتساب
-</a>
-
 <div id="orderModal">
     <div class="modal-content">
-        <h3 style="text-align:center; color: #d81b60; margin-top:0;">إتمام الطلب</h3>
-        <label>اسمك الكريم:</label>
-        <input type="text" id="custName" placeholder="أدخلي اسمك الكامل" required>
-        <label>العنوان بالتفصيل:</label>
-        <input type="text" id="custAddress" placeholder="المدينة، المنطقة، الشارع" required>
-        <button type="button" onclick="sendToWhatsApp()" style="margin-top: 10px; background: #25d366;">إرسال الطلب عبر الواتساب</button>
-        <button type="button" onclick="closeModal()" style="background:#777; margin-top:5px;">إلغاء</button>
+        <h3>بيانات الطلب</h3>
+        <input type="text" id="custName" placeholder="الاسم">
+        <input type="text" id="custAddress" placeholder="العنوان">
+        <button onclick="sendToWhatsApp()" style="background: #25d366;">إرسال للواتساب</button>
+        <button onclick="closeModal()" style="background:#777; margin-top:10px;">إغلاق</button>
     </div>
 </div>
 
 <script>
+let cart = [];
 const products = [
-    { name: "شامبو آشري", price: 275, inStock: true },
-    { name: "شامبو القشرة", price: 300, inStock: true },
-    { name: "بلسم آشري", price: 275, inStock: true },
-    { name: "الوصفة النوبية", price: 425, inStock: true },
-    { name: "وصفة كارما", price: 425, inStock: true },
-    { name: "كارما تونيك سبراي", price: 325, inStock: true },
-    { name: "كارما تونيك إكسترا سبراي", price: 450, inStock: true },
-    { name: "بيبي شامبو آشري", price: 275, inStock: true },
-    { name: "هير ميست - Hair Mist", price: 200, inStock: true },
-    { name: "ليف ان - Leave In", price: 250, inStock: true },
-    { name: "هير ماسك - Hair Mask", price: 300, inStock: true },
-    { name: "غسول الجزر", price: 250, inStock: true },
-    { name: "الكريم المرطب", price: 250, inStock: true },
-    { name: "سيروم الهيالورونيك", price: 450, inStock: true },
-    { name: "مقشر القهوة", price: 250, inStock: true },
-    { name: "ماسك طمي أسوان", price: 250, inStock: false },
-    { name: "كريم الكولاجين", price: 250, inStock: true },
-    { name: "سيروم حب الشباب", price: 225, inStock: true },
-    { name: "سيروم الرموش", price: 200, inStock: true },
-    { name: "سيروم الأظافر", price: 200, inStock: true },
-    { name: "صن بلوك", price: 250, inStock: true },
-    { name: "صن سكرين", price: 400, inStock: true },
-    { name: "هاند كريم", price: 225, inStock: true },
-    { name: "مقشر الشفاه", price: 100, inStock: true },
-    { name: "مرطب الشفاه بالفراولة", price: 125, inStock: true },
-    { name: "ليب بالم ستيك", price: 100, inStock: true },
-    { name: "تنت", price: 100, inStock: true },
-    { name: "تنت كريمي", price: 175, inStock: true },
-    { name: "تونر الورد", price: 100, inStock: true },
-    { name: "تونر النعناع", price: 100, inStock: true },
-    { name: "تونر اللافندر", price: 125, inStock: true },
-    { name: "تونر الليمون", price: 125, inStock: true },
-    { name: "تونر الروزماري", price: 125, inStock: true },
-    { name: "بادي يوجرت Fresh Peach", price: 250, inStock: true },
-    { name: "بادي يوجرت Naughty Coconut", price: 250, inStock: true },
-    { name: "بادي يوجرت Rose Vanilla", price: 250, inStock: true },
-    { name: "بادي يوجرت Sexy Graffiti", price: 250, inStock: true },
-    { name: "مزيل عرق للتفتيح", price: 200, inStock: true },
-    { name: "مزيل عرق إكسترا", price: 250, inStock: true },
-    { name: "مزيل عرق بدون رائحة", price: 250, inStock: true },
-    { name: "زيت غير دهني - دراي أويل", price: 450, inStock: true },
-    { name: "فوت بالم", price: 200, inStock: true },
-    { name: "زبدة الجسم بجوز الهند", price: 275, inStock: true },
-    { name: "بادي اسبلش", price: 300, inStock: true },
-    { name: "زيت اللوز الحلو", price: 150, inStock: true },
-    { name: "زيت الجوجوبا", price: 150, inStock: true },
-    { name: "زيت القهوة", price: 150, inStock: true },
-    { name: "زيت السعد", price: 225, inStock: true },
-    { name: "زيت الزيتون", price: 100, inStock: true },
-    { name: "زيت الكركديه", price: 150, inStock: true },
-    { name: "زيت جوز الهند", price: 120, inStock: true },
-    { name: "زيت الخروع", price: 120, inStock: true },
-    { name: "زيت الجرجير", price: 120, inStock: true },
-    { name: "زيت السمسم", price: 120, inStock: true },
-    { name: "زيت الورد", price: 150, inStock: true },
-    { name: "زيت بذور العنب", price: 225, inStock: true },
-    { name: "زيت جنين القمح", price: 125, inStock: true },
-    { name: "زيت الأفوكادو", price: 125, inStock: true },
-    { name: "زيت القرع", price: 125, inStock: true },
-    { name: "زيت أرجان مغربي", price: 350, inStock: true },
-    { name: "زيت اللافندر المقطر", price: 300, inStock: true },
-    { name: "زيت الليمون المقطر", price: 300, inStock: true },
-    { name: "زيت النعناع المقطر", price: 300, inStock: true },
-    { name: "زيت الورد المقطر", price: 300, inStock: true },
-    { name: "زيت شجرة الشاي المقطر", price: 300, inStock: true },
-    { name: "زيت الروزماري المقطر", price: 350, inStock: true },
-    { name: "صابون مغربي", price: 225, inStock: true },
-    { name: "صابون نوبي", price: 275, inStock: true },
-    { name: "صابونة الفحم", price: 150, inStock: true },
-    { name: "صابونة القهوة", price: 150, inStock: true },
-    { name: "صابونة الكركديه", price: 150, inStock: false },
-    { name: "صابونة الأعشاب", price: 150, inStock: true },
-    { name: "صابونة الشيا وجوز الهند", price: 150, inStock: true },
-    { name: "جيل الصبار", price: 200, inStock: true },
-    { name: "زبدة الشيا", price: 200, inStock: true },
-    { name: "الحنه النوبيه", price: 225, inStock: true },
-    { name: "السدر", price: 225, inStock: true },
-    { name: "فوطة مايكروفايبر", price: 250, inStock: true },
-    { name: "بونيه ساتان", price: 200, inStock: true },
-    { name: "كيس مخدة ساتان", price: 200, inStock: true },
-    { name: "توكة ساتان", price: 75, inStock: true },
-    { name: "ليف مغربي", price: 175, inStock: false },
-    { name: "فرشة شعر بامبو", price: 250, inStock: false },
-    { name: "مشط خشبي", price: 100, inStock: false },
-    { name: "Beach Bag", price: 250, inStock: true },
+    { name: "شامبو آشري", price: 275, inStock: true }, { name: "شامبو القشرة", price: 300, inStock: true }, { name: "بلسم آشري", price: 275, inStock: true },
+    { name: "الوصفة النوبية", price: 425, inStock: true }, { name: "وصفة كارما", price: 425, inStock: true }, { name: "كارما تونيك سبراي", price: 325, inStock: true },
+    { name: "كارما تونيك إكسترا سبراي", price: 450, inStock: true }, { name: "بيبي شامبو آشري", price: 275, inStock: true }, { name: "هير ميست", price: 200, inStock: true },
+    { name: "ليف ان", price: 250, inStock: true }, { name: "هير ماسك", price: 300, inStock: true }, { name: "غسول الجزر", price: 250, inStock: true },
+    { name: "الكريم المرطب", price: 250, inStock: true }, { name: "سيروم الهيالورونيك", price: 450, inStock: true }, { name: "مقشر القهوة", price: 250, inStock: true },
+    { name: "ماسك طمي أسوان", price: 250, inStock: false }, { name: "كريم الكولاجين", price: 250, inStock: true }, { name: "سيروم حب الشباب", price: 225, inStock: true },
+    { name: "سيروم الرموش", price: 200, inStock: true }, { name: "سيروم الأظافر", price: 200, inStock: true }, { name: "صن بلوك", price: 250, inStock: true },
+    { name: "صن سكرين", price: 400, inStock: true }, { name: "هاند كريم", price: 225, inStock: true }, { name: "مقشر الشفاه", price: 100, inStock: true },
+    { name: "مرطب الشفاه بالفراولة", price: 125, inStock: true }, { name: "ليب بالم ستيك", price: 100, inStock: true }, { name: "تنت", price: 100, inStock: true },
+    { name: "تنت كريمي", price: 175, inStock: true }, { name: "تونر الورد", price: 100, inStock: true }, { name: "تونر النعناع", price: 100, inStock: true },
+    { name: "تونر اللافندر", price: 125, inStock: true }, { name: "تونر الليمون", price: 125, inStock: true }, { name: "تونر الروزماري", price: 125, inStock: true },
+    { name: "بادي يوجرت Fresh Peach", price: 250, inStock: true }, { name: "بادي يوجرت Naughty Coconut", price: 250, inStock: true },
+    { name: "بادي يوجرت Rose Vanilla", price: 250, inStock: true }, { name: "بادي يوجرت Sexy Graffiti", price: 250, inStock: true },
+    { name: "مزيل عرق للتفتيح", price: 200, inStock: true }, { name: "مزيل عرق إكسترا", price: 250, inStock: true }, { name: "مزيل عرق بدون رائحة", price: 250, inStock: true },
+    { name: "زيت غير دهني", price: 450, inStock: true }, { name: "فوت بالم", price: 200, inStock: true }, { name: "زبدة الجسم بجوز الهند", price: 275, inStock: true },
+    { name: "بادي اسبلش", price: 300, inStock: true }, { name: "زيت اللوز الحلو", price: 150, inStock: true }, { name: "زيت الجوجوبا", price: 150, inStock: true },
+    { name: "زيت القهوة", price: 150, inStock: true }, { name: "زيت السعد", price: 225, inStock: true }, { name: "زيت الزيتون", price: 100, inStock: true },
+    { name: "زيت الكركديه", price: 150, inStock: true }, { name: "زيت جوز الهند", price: 120, inStock: true }, { name: "زيت الخروع", price: 120, inStock: true },
+    { name: "زيت الجرجير", price: 120, inStock: true }, { name: "زيت السمسم", price: 120, inStock: true }, { name: "زيت الورد", price: 150, inStock: true },
+    { name: "زيت بذور العنب", price: 225, inStock: true }, { name: "زيت جنين القمح", price: 125, inStock: true }, { name: "زيت الأفوكادو", price: 125, inStock: true },
+    { name: "زيت القرع", price: 125, inStock: true }, { name: "زيت أرجان مغربي", price: 350, inStock: true }, { name: "زيت اللافندر", price: 300, inStock: true },
+    { name: "زيت الليمون", price: 300, inStock: true }, { name: "زيت النعناع", price: 300, inStock: true }, { name: "زيت الورد المقطر", price: 300, inStock: true },
+    { name: "زيت شجرة الشاي", price: 300, inStock: true }, { name: "زيت الروزماري", price: 350, inStock: true }, { name: "صابون مغربي", price: 225, inStock: true },
+    { name: "صابون نوبي", price: 275, inStock: true }, { name: "صابونة الفحم", price: 150, inStock: true }, { name: "صابونة القهوة", price: 150, inStock: true },
+    { name: "صابونة الكركديه", price: 150, inStock: false }, { name: "صابونة الأعشاب", price: 150, inStock: true }, { name: "صابونة الشيا", price: 150, inStock: true },
+    { name: "جيل الصبار", price: 200, inStock: true }, { name: "زبدة الشيا", price: 200, inStock: true }, { name: "الحنه النوبيه", price: 225, inStock: true },
+    { name: "السدر", price: 225, inStock: true }, { name: "فوطة مايكروفايبر", price: 250, inStock: true }, { name: "بونيه ساتان", price: 200, inStock: true },
+    { name: "كيس مخدة ساتان", price: 200, inStock: true }, { name: "توكة ساتان", price: 75, inStock: true }, { name: "ليف مغربي", price: 175, inStock: false },
+    { name: "فرشة شعر بامبو", price: 250, inStock: false }, { name: "مشط خشبي", price: 100, inStock: false }, { name: "Beach Bag", price: 250, inStock: true },
     { name: "Beauty Bag", price: 150, inStock: true }
 ];
 
 function renderProducts() {
     const grid = document.getElementById('productGrid');
-    grid.innerHTML = products.map((p, index) => `
+    grid.innerHTML = products.map((p, i) => `
         <div class="card">
-            <div>
-                <h4 style="margin: 5px 0 8px 0; font-size: 15px; color: #333;">${p.name}</h4>
-                <span class="stock-status ${p.inStock ? 'in-stock' : 'out-stock'}">
-                    ${p.inStock ? 'متوفر' : 'غير متوفر'}
-                </span>
-            </div>
-            <div>
-                <p class="price">${p.price} EGP</p>
-                <button onclick="addToCart(${index})" ${p.inStock ? '' : 'disabled'}>
-                    ${p.inStock ? 'إضافة إلى السلة' : 'غير متوفر'}
-                </button>
-            </div>
+            <h4 style="height:40px;">${p.name}</h4>
+            <p class="price">${p.price} EGP</p>
+            <button onclick="addToCart(${i})" ${p.inStock ? '' : 'disabled'}>
+                ${p.inStock ? 'إضافة للسلة' : 'غير متوفر'}
+            </button>
         </div>
     `).join('');
 }
-
-function addToCart(index) {
-    if (!products[index].inStock) return;
-    cart.push(products[index]);
-    document.getElementById('cartCount').innerText = cart.length;
-    alert('تمت إضافة المنتج إلى السلة بنجاح!');
-}
-
-function openCheckout() {
-    if(cart.length === 0) {
-        alert('السلة فارغة حالياً!');
-        return;
-    }
-    document.getElementById('orderModal').style.display = 'flex';
-}
-
-function closeModal() {
-    document.getElementById('orderModal').style.display = 'none';
-}
-
+function addToCart(i) { cart.push(products[i]); document.getElementById('cartCount').innerText = cart.length; alert('تمت الإضافة!'); }
+function openCheckout() { if(cart.length==0) return alert('السلة فارغة'); document.getElementById('orderModal').style.display='flex'; }
+function closeModal() { document.getElementById('orderModal').style.display='none'; }
 function sendToWhatsApp() {
-    const name = document.getElementById('custName').value;
-    const address = document.getElementById('custAddress').value;
-    
-    if(!name || !address) {
-        alert('يرجى إدخال الاسم والعنوان');
-        return;
-    }
-
-    let message = `مرحباً، أريد إتمام الطلب الآتي:\n\n*الاسم:* ${name}\n*العنوان:* ${address}\n\n*المنتجات المطلوبة:*\n`;
-    let total = 0;
-    
-    cart.forEach((item, idx) => {
-        message += `${idx + 1}. ${item.name} - ${item.price} EGP\n`;
-        total += item.price;
-    });
-
-    message += `\n*الإجمالي الكلي:* ${total} EGP`;
-
-    const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/201033012749?text=${encodedMessage}`, '_blank');
+    let msg = "طلب جديد:\n"; cart.forEach(p => msg += p.name + "\n");
+    window.open(`https://wa.me/201033012749?text=${encodeURIComponent(msg)}`, '_blank');
 }
-
 renderProducts();
 </script>
 </body>
