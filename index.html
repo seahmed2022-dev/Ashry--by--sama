@@ -110,6 +110,7 @@
             position: relative;
             border: 1.5px solid var(--card-pink-border);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
         }
 
         .product-card:hover {
@@ -120,7 +121,7 @@
 
         .product-image-wrapper {
             width: 100%;
-            height: 220px;
+            height: 200px;
             background-color: #fff;
             display: flex;
             align-items: center;
@@ -184,13 +185,97 @@
             color: var(--out-of-stock);
         }
 
-        .loading-state {
-            text-align: center;
+        /* نافذة التفاصيل Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            padding: 25px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 2px solid var(--soft-pink);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--light-bg-pink);
+            border: none;
             font-size: 1.2rem;
             color: var(--primary-pink);
-            padding: 50px;
-            grid-column: 1 / -1;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
             font-weight: bold;
+        }
+
+        .modal-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            color: var(--dark-pink-text);
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .modal-desc {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .modal-price {
+            font-size: 1.4rem;
+            color: var(--primary-pink);
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .order-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background-color: #25d366;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .order-btn:hover {
+            background-color: #128c7e;
         }
     </style>
 </head>
@@ -200,7 +285,7 @@
     <header>
         <h1 class="main-title">Ashry by سَمَا 🌸</h1>
         <h2 class="subtitle">مندوب معتمد لبراند عشري</h2>
-        <div id="syncStatus" class="sync-info">عرض منتجات البراند والأسعار الحالية</div>
+        <div class="sync-info">اضغطي على أي منتج لعرض التفاصيل الكاملة ✨</div>
     </header>
 
     <div class="controls">
@@ -212,104 +297,97 @@
         <button class="filter-btn" onclick="filterProducts('Lips Care', event)">العناية بالشفاه</button>
     </div>
 
-    <div class="products-grid" id="productsGrid">
-        <div class="loading-state">جاري تحميل المنتجات... ✨</div>
+    <div class="products-grid" id="productsGrid"></div>
+</div>
+
+<!-- النافذة المنبثقة للتفاصيل -->
+<div class="modal-overlay" id="productModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal()">✕</button>
+        <img id="modalImg" src="" class="modal-img">
+        <h3 id="modalTitle" class="modal-title"></h3>
+        <p id="modalDesc" class="modal-desc"></p>
+        <div id="modalPrice" class="modal-price"></div>
+        <a id="modalOrder" href="#" target="_blank" class="order-btn">طلب المنتج عبر الواتساب 💬</a>
     </div>
 </div>
 
 <script>
-// القائمة كاملة بالأسعار ومربوطة بأسماء الصور المباشرة من سيرفر الموقع الرسمي
+// صور افتراضية عالية الجودة متناسبة مع المنتجات واللون الوردي
+const defaultImages = {
+    "Skin Care": "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500&q=80",
+    "Hair Care": "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?w=500&q=80",
+    "Raw Products": "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&q=80",
+    "Organic Soaps": "https://images.unsplash.com/photo-1607006344380-b6775a0824a7?w=500&q=80",
+    "Lips Care": "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=500&q=80"
+};
+
 const rawProductsList = [
-    { name: "غسول الوجه بالجزر - Facial Cleanser with Carrot", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Carrot-Facial-Cleanser.jpg" },
-    { name: "مزيل عرق للتفتيح - Whitening Deodorant", price: 200, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Deodorant.jpg" },
-    { name: "مزيل عرق اكسترا - Extra Whitening Deodorant", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Extra-Deodorant.jpg" },
-    { name: "مزيل عرق بدون رائحة - Unscented Deodorant", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Unscented-Deodorant.jpg" },
-    { name: "سيرم الهيالورونيك - Hyaluronic Acid Serum", price: 450, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Hyaluronic-Acid.jpg" },
-    { name: "سيرم حب الشباب - Acne Serum", price: 225, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Acne-Serum.jpg" },
-    { name: "كريم ترطيب اليدين - Hand Cream", price: 225, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Hand-Cream.jpg" },
-    { name: "كريم مرطب سوفت اند جلو - Soft and glow Cream", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Soft-and-Glow.jpg" },
-    { name: "كريم الكولاجين - Collagen Cream", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Collagen-Cream.jpg" },
-    { name: "مرطب القدم - Foot Balm", price: 200, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Foot-Balm.jpg" },
-    { name: "بادي يوجرت برائحة جوز الهند - Body Yogurt Naughty Coconut", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Body-Yogurt-Coconut.jpg" },
-    { name: "بادي يوجرت برائحة الخوخ - Body Yogurt Fresh Peach", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Body-Yogurt-Peach.jpg" },
-    { name: "بادي يوجرت برائحة الروز فانيلا - Body Yogurt Rose Vanilla", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Body-Yogurt-Rose-Vanilla.jpg" },
-    { name: "زبدة الجسم برائحة جوز الهند - Body Butter Coconut", price: 275, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Body-Butter.jpg" },
-    { name: "مقشر القهوه - Coffee Scrub", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Coffee-Scrub.jpg" },
-    { name: "واقى الشمس - Sun Block", price: 250, category: "Skin Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Sunblock.jpg" },
-    { name: "واقى الشمس - Sun Screen", price: 400, category: "Skin Care", inStock: false, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Sunscreen-400.jpg" },
+    { name: "غسول الوجه بالجزر - Facial Cleanser with Carrot", price: 250, category: "Skin Care", inStock: true, desc: "غسول غني بالمغذيات الطبيعية ينظف البشرة بلطف ويرطبها بفضل خلاصات الجزر والمكونات الطبيعية 100%." },
+    { name: "مزيل عرق للتفتيح - Whitening Deodorant", price: 200, category: "Skin Care", inStock: true, desc: "مزيل عرق طبيعي خالٍ من الألومنيوم يمنحك انتعاشاً يدوم طويلاً ويساعد على تفتيح المنطقة." },
+    { name: "مزيل عرق اكسترا - Extra Whitening Deodorant", price: 250, category: "Skin Care", inStock: true, desc: "تركيبة مضاعفة وفعالة للتفتيح والحماية الكاملة طوال اليوم بدون إنسداد للمسام." },
+    { name: "مزيل عرق بدون رائحة - Unscented Deodorant", price: 250, category: "Skin Care", inStock: true, desc: "مثالي للبشرة الحساسة ولأصحاب الذوق الناعم الخالي من العطور." },
+    { name: "سيرم الهيالورونيك - Hyaluronic Acid Serum", price: 450, category: "Skin Care", inStock: true, desc: "يرطب البشرة بعمق ويعزز مرونتها ويمحو علامات الجفاف والإرهاق." },
+    { name: "سيرم حب الشباب - Acne Serum", price: 225, category: "Skin Care", inStock: true, desc: "تركيبة لطيفة تقلل من تهيج الحبوب وتساعد على تهدئة البشرة وتنظيف المسام." },
+    { name: "كريم ترطيب اليدين - Hand Cream", price: 225, category: "Skin Care", inStock: true, desc: "نعومة فائقة وملمس غير دهني لحماية اليدين من الجفاف اليومي." },
+    { name: "كريم مرطب سوفت اند جلو - Soft and glow Cream", price: 250, category: "Skin Care", inStock: true, desc: "يعطي إشراقة ونضارة طبيعية للوجه بفضل المكونات المرطبة والمغذية." },
+    { name: "كريم الكولاجين - Collagen Cream", price: 250, category: "Skin Care", inStock: true, desc: "يحسن من مرونة البشرة ويشد الوجه بلطف لمظهر أكثر شباباً ونضارة." },
+    { name: "مرطب القدم - Foot Balm", price: 200, category: "Skin Care", inStock: true, desc: "علاج مكثف للتشققات والجفاف يمنح القدمين نعومة فائقة." },
+    { name: "بادي يوجرت برائحة جوز الهند - Body Yogurt Coconut", price: 250, category: "Skin Care", inStock: true, desc: "مرطب جسم خفيف سريع الامتصاص برائحة جوز الهند الساحرة." },
+    { name: "بادي يوجرت برائحة الخوخ - Body Yogurt Fresh Peach", price: 250, category: "Skin Care", inStock: true, desc: "انتعاش الخوخ الطبيعي يرطب البشرة ويتركها ناعمة ومعطرة." },
+    { name: "بادي يوجرت برائحة الروز فانيلا - Body Yogurt Rose Vanilla", price: 250, category: "Skin Care", inStock: true, desc: "ترطيب مع مزيج رقيق وفاخر من الورد والفانيلا." },
+    { name: "زبدة الجسم برائحة جوز الهند - Body Butter Coconut", price: 275, category: "Skin Care", inStock: true, desc: "ترطيب عميق ومثالي للبشرة شديدة الجفاف غني بالزيوت الطبيعية." },
+    { name: "مقشر القهوه - Coffee Scrub", price: 250, category: "Skin Care", inStock: true, desc: "ينشط الدورة الدموية، يزيل الجلد الميت ويترك البشرة فائقة النعومة." },
+    { name: "واقى الشمس - Sun Block", price: 250, category: "Skin Care", inStock: true, desc: "حماية طبيعية وموثوقة من أشعة الشمس الضارة." },
+    { name: "واقى الشمس - Sun Screen", price: 400, category: "Skin Care", inStock: false, desc: "حماية فائقة ومرطبة تناسب البشرة أثناء التعرض اليومي للشمس." },
 
-    { name: "شامبو الشعر - Hair Shampoo", price: 275, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Hair-Shampoo.jpg" },
-    { name: "بلسم الشعر - Hair Conditioner", price: 275, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Hair-Conditioner.jpg" },
-    { name: "شامبو الاطفال - Kids Shampoo", price: 275, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Kids-Shampoo.jpg" },
-    { name: "الوصفه النوبيه - Nubian Recipe", price: 425, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Nubian-Recipe.jpg" },
-    { name: "وصفة كارما - Karma Recipe", price: 425, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Karma-Recipe.jpg" },
-    { name: "سبراي كارما مقوي للشعر - Karma Tonic Spray200", price: 325, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Karma-Spray.jpg" },
-    { name: "سبراي كارما تونيك اكسترا - Karma Tonic Extra", price: 450, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Karma-Extra.jpg" },
-    { name: "جيل الصبار - Aleo Vera gel", price: 200, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Aloe-Vera.jpg" },
-    { name: "الحنه النوبيه - Nubian Henna", price: 225, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Nubian-Henna.jpg" },
-    { name: "كيس مخده ساتان - Satin Case", price: 200, category: "Hair Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Satin-Pillowcase.jpg" },
+    { name: "شامبو الشعر - Hair Shampoo", price: 275, category: "Hair Care", inStock: true, desc: "تنظيف لطيف للشعر والفروة خالي من المكونات القاسية." },
+    { name: "بلسم الشعر - Hair Conditioner", price: 275, category: "Hair Care", inStock: true, desc: "يسهل التمشيط، ينعم الشعر ويحميه من الهيشان." },
+    { name: "شامبو الاطفال - Kids Shampoo", price: 275, category: "Hair Care", inStock: true, desc: "تركيبة آمنة ولطيفة جداً على عين وبشرة الأطفال." },
+    { name: "الوصفه النوبيه - Nubian Recipe", price: 425, category: "Hair Care", inStock: true, desc: "خلطة زيوت طبيعية متكاملة لتغذية الشعر وإطالته." },
+    { name: "وصفة كارما - Karma Recipe", price: 425, category: "Hair Care", inStock: true, desc: "أقوى تركيبات عشري لإعادة الحيوية للشعر المجهد والمتساقط." },
+    { name: "سبراي كارما مقوي للشعر - Karma Tonic Spray", price: 325, category: "Hair Care", inStock: true, desc: "تونك يومي ينشط البصيلات ويقلل التساقط بدون أثر دهني." },
+    { name: "سبراي كارما تونيك اكسترا - Karma Tonic Extra", price: 450, category: "Hair Care", inStock: true, desc: "نسخة مكثفة لعلاج التساقط الشديد وزيادة كثافة الشعر." },
+    { name: "جيل الصبار - Aleo Vera gel", price: 200, category: "Hair Care", inStock: true, desc: "مستخلص الصبار النقية لترطيب الشعر والبشرة وتهدئة الفروة." },
+    { name: "الحنه النوبيه - Nubian Henna", price: 225, category: "Hair Care", inStock: true, image: "", desc: "حناء طبيعية تغذي الشعر وتمنحه لوناً غنياً ولمعاناً وصحة." },
+    { name: "كيس مخده ساتان - Satin Case", price: 200, category: "Hair Care", inStock: true, desc: "يحمي الشعر من الهيشان والتقصف أثناء النوم ويحافظ على نضارة البشرة." },
 
-    { name: "زيت الروزماري المقطر - Rosemary Essential Oil", price: 350, category: "Raw Products", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Rosemary-Essential-Oil.jpg" },
-    { name: "ماء الروزماري - Rosemary Water", price: 125, category: "Raw Products", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Rosemary-Water.jpg" },
-    { name: "زيت الارجان المغربي - Moroccan Argan Oil", price: 350, category: "Raw Products", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Argan-Oil.jpg" },
-    { name: "زيت الجوجوبا - Jojoba Oil", price: 150, category: "Raw Products", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Jojoba-Oil.jpg" },
-    { name: "زيت اللوز الحلو - Sweet Almond Oil", price: 150, category: "Raw Products", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Sweet-Almond.jpg" },
-    { name: "زبدة الشيا - Shea Butter", price: 200, category: "Raw Products", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Shea-Butter.jpg" },
+    { name: "زيت الروزماري المقطر - Rosemary Essential Oil", price: 350, category: "Raw Products", inStock: true, desc: "زيت حُضر بالتقطير النقي لتحفيز نمو الشعر وتنشيط الفروة." },
+    { name: "ماء الروزماري - Rosemary Water", price: 125, category: "Raw Products", inStock: true, desc: "بخاخ طبيعي منعش للشعر والفروة للحد من التساقط." },
+    { name: "زيت الارجان المغربي - Moroccan Argan Oil", price: 350, category: "Raw Products", inStock: true, desc: "الذهب السائل لنعومة ولمعان الشعر وترطيب البشرة." },
+    { name: "زيت الجوجوبا - Jojoba Oil", price: 150, category: "Raw Products", inStock: true, desc: "زيت خفيف سريع الامتصاص يوازن إفراز دهون البشرة والشعر." },
+    { name: "زيت اللوز الحلو - Sweet Almond Oil", price: 150, category: "Raw Products", inStock: true, desc: "مثالي لترطيب الجسم والهالات السوداء وتقوية الشعر." },
+    { name: "زبدة الشيا - Shea Butter", price: 200, category: "Raw Products", inStock: true, desc: "زبدة شيا نقية الخام لترطيب مكثف وعلاج التشققات." },
 
-    { name: "صابون نوبي بالكركدية - Nubian Soap With Hibiscus", price: 275, category: "Organic Soaps", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Nubian-Soap.jpg" },
-    { name: "صابونة الفحم - Charcoal Soap", price: 150, category: "Organic Soaps", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Charcoal-Soap.jpg" },
-    { name: "صابونة القهوه - Coffee Soap", price: 150, category: "Organic Soaps", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Coffee-Soap.jpg" },
-    { name: "صابونة الاعشاب - Herbs Soap", price: 150, category: "Organic Soaps", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Herbs-Soap.jpg" },
+    { name: "صابون نوبي بالكركدية - Nubian Soap With Hibiscus", price: 275, category: "Organic Soaps", inStock: true, desc: "صابونة طبيعية تنظف البشرة وتعطيها نضارة بفضل خلاصة الكركديه." },
+    { name: "صابونة الفحم - Charcoal Soap", price: 150, category: "Organic Soaps", inStock: true, desc: "تنظيف عميق للمسام وتقليل الشوائب والدهون الزائدة." },
+    { name: "صابونة القهوه - Coffee Soap", price: 150, category: "Organic Soaps", inStock: true, desc: "تقشير لطيف وتنشيط للبشرة برائحة القهوة المميزة." },
+    { name: "صابونة الاعشاب - Herbs Soap", price: 150, category: "Organic Soaps", inStock: true, desc: "مزيج أعشاب طبيعية لتهدئة وتنظيف جميع أنواع البشرة." },
 
-    { name: "مرطب الشفاه - Lip Balm", price: 125, category: "Lips Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Lip-Balm.jpg" },
-    { name: "مقشر الشفاه - Lip Scrub", price: 100, category: "Lips Care", inStock: true, image: "https://ashrynatural.com/wp-content/uploads/2023/10/Lip-Scrub.jpg" }
+    { name: "مرطب الشفاه - Lip Balm", price: 125, category: "Lips Care", inStock: true, desc: "ترطيب وتغذية الشفاه وحمايتها من الجفاف والتشقق." },
+    { name: "مقشر الشفاه - Lip Scrub", price: 100, category: "Lips Care", inStock: true, desc: "يزيل الخلايا الميتة بلطف لشفاه ناعمة ووردي طبيعي." }
 ];
 
-let globalProductsList = [];
-
-function removeDuplicates(products) {
-    const uniqueMap = new Map();
-    products.forEach(product => {
-        const productName = product.name || product.title || '';
-        const normalizedName = productName.trim().toLowerCase();
-        if (normalizedName && !uniqueMap.has(normalizedName)) {
-            uniqueMap.set(normalizedName, product);
-        }
-    });
-    return Array.from(uniqueMap.values());
-}
-
-function initProducts() {
-    globalProductsList = removeDuplicates(rawProductsList);
-    displayProducts(globalProductsList);
-}
+let globalProducts = rawProductsList;
 
 function displayProducts(products) {
     const grid = document.getElementById('productsGrid');
     grid.innerHTML = '';
 
-    if (products.length === 0) {
-        grid.innerHTML = '<div class="loading-state">لا توجد منتجات متوفرة في هذا القسم.</div>';
-        return;
-    }
-
-    products.forEach(product => {
+    products.forEach((product, index) => {
         const card = document.createElement('div');
         card.className = 'product-card';
-        
+        card.onclick = () => openModal(product);
+
+        const imgUrl = product.image || defaultImages[product.category] || defaultImages["Skin Care"];
         const statusClass = product.inStock ? 'in-stock' : 'out-of-stock';
         const statusText = product.inStock ? 'متوفر' : 'غير متوفر';
 
-        // إمكانية إظهار الصورة وفي حال وجود خطأ في تحميل الصورة من المصدر يتم إخفاء الإطار بسلاسة
-        const imageHTML = (product.image && product.image.trim() !== "") 
-            ? `<div class="product-image-wrapper">
-                 <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.parentElement.style.display='none'">
-               </div>`
-            : '';
-
         card.innerHTML = `
             <span class="status-badge ${statusClass}">${statusText}</span>
-            ${imageHTML}
+            <div class="product-image-wrapper">
+                <img src="${imgUrl}" alt="${product.name}" class="product-image">
+            </div>
             <div class="product-info">
                 <div>
                     <div class="product-category">${product.category}</div>
@@ -322,21 +400,39 @@ function displayProducts(products) {
     });
 }
 
+function openModal(product) {
+    const imgUrl = product.image || defaultImages[product.category] || defaultImages["Skin Care"];
+    document.getElementById('modalImg').src = imgUrl;
+    document.getElementById('modalTitle').innerText = product.name;
+    document.getElementById('modalDesc').innerText = product.desc;
+    document.getElementById('modalPrice').innerText = product.price + " EGP";
+    
+    // رابط طلب الواتساب المباشر
+    const message = encodeURIComponent(`مرحباً سما، أود طلب: ${product.name} بسعر ${product.price} ج.م`);
+    document.getElementById('modalOrder').href = `https://wa.me/?text=${message}`;
+
+    document.getElementById('productModal').style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('productModal').style.display = 'none';
+}
+
 function filterProducts(category, evt) {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
     if (evt && evt.target) evt.target.classList.add('active');
 
     if (category === 'all') {
-        displayProducts(globalProductsList);
+        displayProducts(globalProducts);
     } else {
-        const filtered = globalProductsList.filter(p => p.category === category);
+        const filtered = globalProducts.filter(p => p.category === category);
         displayProducts(filtered);
     }
 }
 
-window.addEventListener('DOMContentLoaded', initProducts);
+window.addEventListener('DOMContentLoaded', () => displayProducts(globalProducts));
 </script>
 
 </body>
-</html>
+</html> 
