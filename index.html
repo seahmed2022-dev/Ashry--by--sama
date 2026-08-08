@@ -3,32 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ashry by سَمَا 🌸</title>
-    <!-- مكتبة الأيقونات لتصميم أنيق بدون صور -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Ashry by سَمَا | قائمة المنتجات</title>
     <style>
         :root {
-            --primary-pink: #ff4081;
-            --soft-pink: #f8bbd0;
-            --light-bg-pink: #fff0f5;
-            --dark-pink-text: #880e4f;
+            --primary-color: #d81b60;
+            --secondary-color: #f48fb1;
+            --accent-pink: #f06292;
+            --bg-color: #fff5f8;
             --card-bg: #ffffff;
-            --whatsapp-green: #25d366;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            --text-color: #212529;
+            --out-of-stock: #e63946;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light-bg-pink);
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
             padding: 20px;
-            direction: rtl;
-            padding-bottom: 80px;
         }
 
         .container {
@@ -39,24 +31,20 @@
         header {
             text-align: center;
             margin-bottom: 30px;
-            padding: 25px 20px;
-            background: linear-gradient(135deg, #ffffff 0%, #fce4ec 100%);
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.1);
-            border: 2px solid var(--soft-pink);
         }
 
-        .main-title {
-            color: var(--primary-pink);
+        header h1 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
             font-size: 2.2rem;
-            margin-bottom: 8px;
-            font-weight: 800;
         }
 
-        .subtitle {
-            color: var(--dark-pink-text);
+        header h2 {
+            color: #666;
             font-size: 1.1rem;
-            font-weight: 600;
+            font-weight: 500;
+            margin-top: 0;
+            margin-bottom: 20px;
         }
 
         .controls {
@@ -69,19 +57,19 @@
 
         .filter-btn {
             background-color: var(--card-bg);
-            border: 2px solid var(--primary-pink);
-            color: var(--primary-pink);
-            padding: 8px 18px;
-            border-radius: 25px;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s ease;
         }
 
         .filter-btn.active, .filter-btn:hover {
-            background-color: var(--primary-pink);
+            background-color: var(--primary-color);
             color: white;
-            box-shadow: 0 4px 12px rgba(255, 64, 129, 0.2);
+            box-shadow: 0 4px 10px rgba(216, 27, 96, 0.25);
         }
 
         .products-grid {
@@ -92,43 +80,41 @@
 
         .product-card {
             background-color: var(--card-bg);
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.08);
-            border: 1.5px solid var(--soft-pink);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(216, 27, 96, 0.08);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            position: relative;
+            border: 1px solid #fce4ec;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(255, 64, 129, 0.2);
-            border-color: var(--primary-pink);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(216, 27, 96, 0.15);
         }
 
-        .product-image-box {
+        .product-image-wrapper {
             width: 100%;
-            height: 160px;
-            background: linear-gradient(135deg, #fff 0%, #fce4ec 100%);
+            height: 180px;
+            background-color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-bottom: 1px solid var(--soft-pink);
-            color: var(--primary-pink);
-            font-size: 3rem;
+            overflow: hidden;
+            border-bottom: 1px solid #fce4ec;
         }
 
-        .product-image-box img {
+        .product-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
         .product-info {
-            padding: 16px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
@@ -136,131 +122,43 @@
         }
 
         .product-category {
-            font-size: 0.75rem;
-            color: var(--dark-pink-text);
-            font-weight: 600;
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .product-title {
             font-size: 1rem;
-            margin: 6px 0;
-            font-weight: 700;
-            color: #333;
+            margin: 8px 0;
+            font-weight: 600;
         }
 
         .product-price {
-            font-size: 1.2rem;
-            color: var(--primary-pink);
+            font-size: 1.15rem;
+            color: var(--primary-color);
             font-weight: bold;
-            margin-top: 8px;
         }
 
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            max-width: 450px;
-            width: 100%;
-            padding: 25px;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            border: 2px solid var(--soft-pink);
-        }
-
-        .close-btn {
+        .status-badge {
             position: absolute;
-            top: 15px;
-            left: 15px;
-            background: var(--light-bg-pink);
-            border: none;
-            font-size: 1.2rem;
-            color: var(--primary-pink);
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            cursor: pointer;
+            top: 10px;
+            left: 10px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
             font-weight: bold;
+            z-index: 2;
         }
 
-        .btn-action {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border-radius: 25px;
-            text-align: center;
-            text-decoration: none;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            font-size: 0.95rem;
+        .in-stock {
+            background-color: rgba(232, 245, 233, 0.9);
+            color: #2e7d32;
         }
 
-        .btn-wa { background: var(--whatsapp-green); color: white; }
-        .btn-web { background: var(--primary-pink); color: white; }
-
-        .order-form {
-            display: none;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px dashed var(--soft-pink);
-        }
-
-        .order-form input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 8px;
-            border: 1px solid var(--soft-pink);
-            border-radius: 8px;
-            font-family: inherit;
-        }
-
-        .btn-submit {
-            background: var(--dark-pink-text);
-            color: white;
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        /* أيقونة الواتساب العائمة مثبتة على اليمين بالأسفل */
-        .floating-wa-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--whatsapp-green);
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            text-decoration: none;
-            z-index: 999;
-            transition: transform 0.3s ease;
-        }
-
-        .floating-wa-btn:hover {
-            transform: scale(1.1);
+        .out-of-stock {
+            background-color: rgba(255, 235, 238, 0.9);
+            color: #c62828;
         }
     </style>
 </head>
@@ -268,144 +166,141 @@
 
 <div class="container">
     <header>
-        <h1 class="main-title">Ashry by سَمَا 🌸</h1>
-        <h2 class="subtitle">مندوب معتمد لبراند عشري</h2>
+        <h1>Ashry by سَمَا</h1>
+        <h2>مندوب معتمد لبراند آشري</h2>
+        <div class="controls">
+            <button class="filter-btn active" onclick="filterProducts('all')">الكل</button>
+            <button class="filter-btn" onclick="filterProducts('Skin Care')">العناية بالبشرة</button>
+            <button class="filter-btn" onclick="filterProducts('Hair Care')">العناية بالشعر</button>
+            <button class="filter-btn" onclick="filterProducts('Raw Products')">الزيوت والمواد الخام</button>
+            <button class="filter-btn" onclick="filterProducts('Organic Soaps')">الصابون الطبيعي</button>
+            <button class="filter-btn" onclick="filterProducts('Lips Care')">العناية بالشفاه</button>
+        </div>
     </header>
-
-    <div class="controls">
-        <button class="filter-btn active" onclick="filterProducts('all', event)">الكل</button>
-        <button class="filter-btn" onclick="filterProducts('Skin Care', event)">العناية بالبشرة</button>
-        <button class="filter-btn" onclick="filterProducts('Hair Care', event)">العناية بالشعر</button>
-        <button class="filter-btn" onclick="filterProducts('Raw Products', event)">الزيوت والمواد الخام</button>
-        <button class="filter-btn" onclick="filterProducts('Organic Soaps', event)">الصابون الطبيعي</button>
-        <button class="filter-btn" onclick="filterProducts('Lips Care', event)">العناية بالشفاه</button>
-    </div>
 
     <div class="products-grid" id="productsGrid"></div>
 </div>
 
-<div class="modal-overlay" id="productModal">
-    <div class="modal-content">
-        <button class="close-btn" onclick="closeModal()">✕</button>
-        <h3 id="modalTitle" style="color: var(--dark-pink-text); margin-bottom: 8px;"></h3>
-        <p id="modalPrice" style="color: var(--primary-pink); font-weight: bold; font-size: 1.2rem; margin-bottom: 15px;"></p>
-
-        <a id="modalWaBtn" href="#" target="_blank" class="btn-action btn-wa">طلب عبر الواتساب <i class="fab fa-whatsapp"></i></a>
-        <button class="btn-action btn-web" onclick="toggleForm()">طلب مباشر من الويب سايت 🛒</button>
-
-        <form id="webForm" class="order-form" onsubmit="submitOrder(event)">
-            <input type="text" id="custName" placeholder="الاسم بالكامل" required>
-            <input type="tel" id="custPhone" placeholder="رقم الهاتف" required>
-            <input type="text" id="custAddress" placeholder="العنوان التفصيلي" required>
-            <button type="submit" class="btn-submit">تأكيد الطلب</button>
-        </form>
-    </div>
-</div>
-
-<!-- زر الواتساب العائم بالأسفل مدمج به رقمك مباشرة -->
-<a href="https://wa.me/201033012749?text=مرحباً%20سما،%20عايزة%20أستفسر%20عن%20منتجات%20عشري" class="floating-wa-btn" target="_blank" title="تواصل معنا عبر الواتساب">
-    <i class="fab fa-whatsapp"></i>
-</a>
-
 <script>
-// رقم الواتساب المباشر الخاص بكِ بالصيغة الدولية
-const myPhoneNumber = "201033012749"; 
-
-const categoryIcons = {
-    "Skin Care": "fa-sparkles",
-    "Hair Care": "fa-pump-soap",
-    "Raw Products": "fa-bottle-droplet",
-    "Organic Soaps": "fa-soap",
-    "Lips Care": "fa-heart"
-};
-
-const productsList = [
-    { id: 1, name: "غسول الوجه بالجزر", price: 250, category: "Skin Care", image: "" },
-    { id: 2, name: "مزيل عرق للتفتيح", price: 200, category: "Skin Care", image: "" },
-    { id: 3, name: "كريم ترطيب اليدين", price: 225, category: "Skin Care", image: "" },
-    { id: 4, name: "سيرم الهيالورونيك", price: 450, category: "Skin Care", image: "" },
-    { id: 5, name: "بادي يوجرت برائحة جوز الهند", price: 250, category: "Skin Care", image: "" },
-    
-    { id: 6, name: "شامبو الشعر", price: 275, category: "Hair Care", image: "" },
-    { id: 7, name: "بلسم الشعر", price: 275, category: "Hair Care", image: "" },
-    { id: 8, name: "الوصفه النوبيه", price: 425, category: "Hair Care", image: "" },
-    { id: 9, name: "وصفة كارما", price: 425, category: "Hair Care", image: "" },
-
-    { id: 10, name: "زيت الروزماري المقطر", price: 350, category: "Raw Products", image: "" },
-    { id: 11, name: "ماء الروزماري", price: 125, category: "Raw Products", image: "" },
-    { id: 12, name: "زيت الارجان المغربي", price: 350, category: "Raw Products", image: "" },
-
-    { id: 13, name: "صابون نوبي بالكركدية", price: 275, category: "Organic Soaps", image: "" },
-    { id: 14, name: "صابونة الفحم", price: 150, category: "Organic Soaps", image: "" },
-
-    { id: 15, name: "مرطب الشفاه", price: 125, category: "Lips Care", image: "" },
-    { id: 16, name: "مقشر الشفاه", price: 100, category: "Lips Care", image: "" }
+const rawProductsList = [
+    { name: "زيت الروزماري المقطر - Rosemary Essential Oil", price: 350, category: "Raw Products", inStock: true, image: "" },
+    { name: "صابون نوبي بالكركدية - Nubian Soap With Hibiscus", price: 275, category: "Skin Care", inStock: true, image: "" },
+    { name: "زيت جنين القمح - Wheat germ Oil", price: 125, category: "Raw Products", inStock: true, image: "" },
+    { name: "كريم ترطيب اليدين - Hand Cream", price: 225, category: "Skin Care", inStock: true, image: "" },
+    { name: "كيس مخده ساتان - Satin Case", price: 200, category: "Hair Care", inStock: true, image: "" },
+    { name: "مرطب القدم - Foot Balm", price: 200, category: "Skin Care", inStock: true, image: "" },
+    { name: "بادي يوجرت برائحة جوز الهند - Body Yogurt Naughty Coconut", price: 250, category: "Skin Care", inStock: true, image: "" },
+    { name: "زبدة الجسم برائحة جوز الهند - Body Butter Coconut", price: 275, category: "Skin Care", inStock: true, image: "" },
+    { name: "ماء الروزماري - Rosemary Water", price: 125, category: "Raw Products", inStock: true, image: "" },
+    { name: "مزيل عرق بدون رائحة - Unscented Deodorant", price: 250, category: "Skin Care", inStock: true, image: "" },
+    { name: "سيروم الاظافر - Nail serum", price: 200, category: "Skin Care", inStock: true, image: "" },
+    { name: "ماء النعناع - Peppermint Water", price: 100, category: "Raw Products", inStock: true, image: "" },
+    { name: "زيت القرع - Pumpkin seeds oil", price: 125, category: "Raw Products", inStock: true, image: "" },
+    { name: "زيت بذور العنب - Grapeseeds Oil", price: 225, category: "Raw Products", inStock: true, image: "" },
+    { name: "توكه ساتان - Satin Scrunchie", price: 75, category: "Hair Care", inStock: true, image: "" },
+    { name: "مشط خشبي", price: 100, category: "Hair Care", inStock: false, image: "" },
+    { name: "صابونة الاعشاب - Herbs Soap", price: 150, category: "Organic Soaps", inStock: true, image: "" },
+    { name: "بادي يوجرت برائحة الخوخ - Body Yogurt Fresh Peach", price: 250, category: "Skin Care", inStock: true, image: "" },
+    { name: "زيت السمسم - Sesame Oil", price: 120, category: "Raw Products", inStock: true, image: "" },
+    { name: "ماء الليمون - Lemon Water", price: 125, category: "Raw Products", inStock: true, image: "" },
+    { name: "زيت الكركديه - Hibiscus Oil", price: 150, category: "Raw Products", inStock: true, image: "" },
+    { name: "شامبو الاطفال - Kids Shampoo", price: 275, category: "Hair Care", inStock: true, image: "" },
+    { name: "زيت اللوز الحلو - Sweet Almond Oil", price: 150, category: "Raw Products", inStock: true, image: "" },
+    { name: "بادي يوجرت برائحة الروز فانيلا - Body Yogurt Rose Vanilla", price: 250, category: "Skin Care", inStock: true, image: "" },
+    { name: "زيت الخروع - Castor Oil", price: 120, category: "Raw Products", inStock: true, image: "" },
+    { name: "مقشر الشفاه - Lip Scrub", price: 100, category: "Lips Care", inStock: true, image: "" },
+    { name: "واقى الشمس - Sun Screen", price: 400, category: "Skin Care", inStock: false, image: "" },
+    { name: "زيت الافوكادو - Avocado Oil", price: 125, category: "Raw Products", inStock: true, image: "" },
+    { name: "زيت الارجان المغربي - Moroccan Argan Oil", price: 350, category: "Raw Products", inStock: true, image: "" },
+    { name: "فرشاة الشعر بخشب البامبو - Hair Brush", price: 250, category: "Hair Care", inStock: true, image: "" },
+    { name: "زيت القهوة - Coffee Oil", price: 150, category: "Raw Products", inStock: true, image: "" },
+    { name: "ماء اللافندر - Lavender Water", price: 125, category: "Raw Products", inStock: true, image: "" },
+    { name: "تنت كريمي - Tint Creamy", price: 175, category: "Skin Care", inStock: true, image: "" },
+    { name: "فوطه مايكروفايبر - Microfiber Towel", price: 250, category: "Hair Care", inStock: true, image: "" },
+    { name: "زبدة الشيا - Shea Butter", price: 200, category: "Raw Products", inStock: true, image: "" },
+    { name: "زيت الورد - Rose oil", price: 150, category: "Raw Products", inStock: true, image: "" },
+    { name: "زيت الجرجير - Eruca Oil", price: 120, category: "Raw Products", inStock: true, image: "" },
+    { name: "قناع الطمي الاسواني - Aswan Clay Mask", price: 250, category: "Skin Care", inStock: false, image: "" },
+    { name: "صابونة الشيا وجوز الهند - Shea and Coconut Soap", price: 150, category: "Organic Soaps", inStock: true, image: "" },
+    { name: "صابون مغربي - Moroccan Soap", price: 225, category: "Skin Care", inStock: true, image: "" },
+    { name: "مرطب الشفاه - Lip Balm", price: 125, category: "Lips Care", inStock: true, image: "" },
+    { name: "مقشر القهوه - Coffee Scrub", price: 250, category: "Skin Care", inStock: true, image: "" },
+    { name: "لوفه مغربي - Moroccan Loofah", price: 175, category: "Skin Care", inStock: true, image: "" },
+    { name: "سيرم حب الشباب - Acne Serum", price: 225, category: "Skin Care", inStock: true, image: "" },
+    { name: "الحنه النوبيه - Nubian Henna", price: 225, category: "Hair Care", inStock: true, image: "" },
+    { name: "بادي يوجرت Sexy Graffiti", price: 250, category: "Skin Care", inStock: true, image: "" },
+    { name: "صابونة الكركديه - Hibiscus Soap", price: 150, category: "Organic Soaps", inStock: false, image: "" },
+    { name: "واقى الشمس - Sun Block", price: 250, category: "Skin Care", inStock: true, image: "" },
+    { name: "زيت السعد - Cyperus Oil", price: 225, category: "Skin Care", inStock: true, image: "" },
+    { name: "زيت الجوجوبا - Jojoba Oil", price: 150, category: "Raw Products", inStock: true, image: "" },
+    { name: "صابونة الفحم - Charcoal Soap", price: 150, category: "Organic Soaps", inStock: true, image: "" },
+    { name: "صابونة القهوه - Coffee Soap", price: 150, category: "Organic Soaps", inStock: true, image: "" },
+    { name: "سيرم الهيالورونيك - Hyaluronic Acid Serum", price: 450, category: "Skin Care", inStock: true, image: "" },
+    { name: "جيل الصبار - Aleo Vera gel", price: 200, category: "Hair Care", inStock: true, image: "" },
+    { name: "كريم الكولاجين - Collagen Cream", price: 250, category: "Skin Care", inStock: true, image: "" },
+    { name: "سيرم الرموش - Eyelash Serum", price: 200, category: "Skin Care", inStock: true, image: "" },
+    { name: "بلسم الشعر - Hair Conditioner", price: 275, category: "Hair Care", inStock: true, image: "" },
+    { name: "الوصفه النوبيه - Nubian Recipe", price: 425, category: "Hair Care", inStock: true, image: "" },
+    { name: "وصفة كارما - Karma Recipe", price: 425, category: "Hair Care", inStock: true, image: "" },
+    { name: "غسول الوجه بالجزر - Facial Cleanser with Carrot", price: 250, category: "Skin Care", inStock: true, image: "" },
+    { name: "شامبو الشعر - Hair Shampoo", price: 275, category: "Hair Care", inStock: true, image: "" },
+    { name: "كريم مرطب سوفت اند جلو - Soft and glow Cream", price: 250, category: "Skin Care", inStock: true, image: "" },
+    { name: "سبراي كارما مقوي للشعر - Karma Tonic Spray200", price: 325, category: "Hair Care", inStock: true, image: "" },
+    { name: "مزيل عرق اكسترا - Extra Whitening Deodorant", price: 250, category: "Skin Care", inStock: true, image: "" },
+    { name: "سبراي كارما تونيك اكسترا - Karma Tonic Extra", price: 450, category: "Hair Care", inStock: true, image: "" },
+    { name: "مزيل عرق للتفتيح - Whitening Deodorant", price: 200, category: "Skin Care", inStock: true, image: "" },
+    { name: "تنت ملون الشفاه والخدود - Tint", price: 100, category: "Skin Care", inStock: true, image: "" }
 ];
 
-let selectedProduct = null;
+function removeDuplicates(products) {
+    const uniqueMap = new Map();
+    products.forEach(product => {
+        const normalizedName = product.name.trim().toLowerCase();
+        if (!uniqueMap.has(normalizedName)) {
+            uniqueMap.set(normalizedName, product);
+        }
+    });
+    return Array.from(uniqueMap.values());
+}
+
+const productsList = removeDuplicates(rawProductsList);
 
 function displayProducts(products) {
     const grid = document.getElementById('productsGrid');
     grid.innerHTML = '';
 
-    products.forEach(p => {
+    products.forEach(product => {
         const card = document.createElement('div');
         card.className = 'product-card';
-        card.onclick = () => openModal(p);
+        
+        const statusClass = product.inStock ? 'in-stock' : 'out-of-stock';
+        const statusText = product.inStock ? 'متوفر' : 'غير متوفر';
 
-        const imageContent = p.image && p.image.trim() !== "" 
-            ? `<img src="${p.image}" alt="${p.name}">` 
-            : `<i class="fa-solid ${categoryIcons[p.category] || 'fa-spa'}"></i>`;
+        const imageHTML = (product.image && product.image.trim() !== "") 
+            ? `<div class="product-image-wrapper">
+                 <img src="${product.image}" alt="${product.name}" class="product-image">
+               </div>`
+            : '';
 
         card.innerHTML = `
-            <div class="product-image-box">
-                ${imageContent}
-            </div>
+            <span class="status-badge ${statusClass}">${statusText}</span>
+            ${imageHTML}
             <div class="product-info">
                 <div>
-                    <div class="product-category">${p.category}</div>
-                    <div class="product-title">${p.name}</div>
+                    <div class="product-category">${product.category}</div>
+                    <div class="product-title">${product.name}</div>
                 </div>
-                <div class="product-price">${p.price} EGP</div>
+                <div class="product-price">${product.price} EGP</div>
             </div>
         `;
         grid.appendChild(card);
     });
 }
 
-function openModal(product) {
-    selectedProduct = product;
-    document.getElementById('modalTitle').innerText = product.name;
-    document.getElementById('modalPrice').innerText = product.price + " EGP";
-
-    // رابط مباشر يفتح المحادثة معكِ ومعها اسم المنتج وسعره جاهزين
-    const msg = encodeURIComponent(`مرحباً سما، أود طلب: ${product.name} بسعر ${product.price} ج.م`);
-    document.getElementById('modalWaBtn').href = `https://wa.me/${myPhoneNumber}?text=${msg}`;
-
-    document.getElementById('webForm').style.display = 'none';
-    document.getElementById('productModal').style.display = 'flex';
-}
-
-function closeModal() {
-    document.getElementById('productModal').style.display = 'none';
-}
-
-function toggleForm() {
-    const form = document.getElementById('webForm');
-    form.style.display = form.style.display === 'block' ? 'none' : 'block';
-}
-
-function submitOrder(e) {
-    e.preventDefault();
-    const name = document.getElementById('custName').value;
-    alert(`تم استلام طلبك لمنتج (${selectedProduct.name}) بنجاح يا ${name}! وسنتواصل معكِ فوراً.`);
-    closeModal();
-}
-
-function filterProducts(category, evt) {
+function filterProducts(category) {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
-    if (evt && evt.target) evt.target.classList.add('active');
+    event.target.classList.add('active');
 
     if (category === 'all') {
         displayProducts(productsList);
@@ -415,7 +310,7 @@ function filterProducts(category, evt) {
     }
 }
 
-window.addEventListener('DOMContentLoaded', () => displayProducts(productsList));
+displayProducts(productsList);
 </script>
 
 </body>
