@@ -2,353 +2,97 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ashry by سَمَا | قائمة المنتجات</title>
-    <!-- استدعاء أيقونات FontAwesome لعلامة الواتساب -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Ashry by سَمَا | إدارة المتجر</title>
     <style>
-        :root {
-            --primary-color: #d81b60;
-            --secondary-color: #f48fb1;
-            --accent-pink: #f06292;
-            --bg-color: #fff5f8;
-            --card-bg: #ffffff;
-            --text-color: #212529;
-            --out-of-stock: #e63946;
-            --whatsapp-color: #25d366;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        header h1 {
-            color: var(--primary-color);
-            margin-bottom: 5px;
-            font-size: 2.2rem;
-        }
-
-        header h2 {
-            color: #666;
-            font-size: 1.1rem;
-            font-weight: 500;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
-        }
-
-        .filter-btn {
-            background-color: var(--card-bg);
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn.active, .filter-btn:hover {
-            background-color: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 10px rgba(216, 27, 96, 0.25);
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 20px;
-        }
-
-        .product-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(216, 27, 96, 0.08);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            border: 1px solid #fce4ec;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .product-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(216, 27, 96, 0.15);
-        }
-
-        .product-image-wrapper {
-            width: 100%;
-            height: 180px;
-            background-color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-bottom: 1px solid #fce4ec;
-        }
-
-        .product-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .product-info {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            justify-content: space-between;
-        }
-
-        .product-category {
-            font-size: 0.8rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .product-title {
-            font-size: 1rem;
-            margin: 8px 0;
-            font-weight: 600;
-        }
-
-        .product-price {
-            font-size: 1.15rem;
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-
-        .status-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            z-index: 2;
-        }
-
-        .in-stock {
-            background-color: rgba(232, 245, 233, 0.9);
-            color: #2e7d32;
-        }
-
-        .out-of-stock {
-            background-color: rgba(255, 235, 238, 0.9);
-            color: #c62828;
-        }
-
-        /* زر الواتساب العائم */
-        .whatsapp-float {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            bottom: 25px;
-            right: 25px;
-            background-color: var(--whatsapp-color);
-            color: #fff;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 32px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.1);
-            color: #fff;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
-        }
+        body { font-family: sans-serif; background: #fff5f8; padding: 20px; }
+        .admin-panel { background: #fff; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #d81b60; display: none; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; }
+        .price { color: #d81b60; font-weight: bold; }
+        button { background: #d81b60; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 5px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>Ashry by سَمَا</h1>
-        <h2>مندوب معتمد لبراند آشري</h2>
-        <div class="controls">
-            <button class="filter-btn active" onclick="filterProducts('all')">الكل</button>
-            <button class="filter-btn" onclick="filterProducts('Skin Care')">العناية بالبشرة</button>
-            <button class="filter-btn" onclick="filterProducts('Hair Care')">العناية بالشعر</button>
-            <button class="filter-btn" onclick="filterProducts('Raw Products')">الزيوت والمواد الخام</button>
-            <button class="filter-btn" onclick="filterProducts('Organic Soaps')">الصابون الطبيعي</button>
-            <button class="filter-btn" onclick="filterProducts('Lips Care')">العناية بالشفاه</button>
-        </div>
-    </header>
+<!-- زر لفتح لوحة التحكم -->
+<button onclick="document.querySelector('.admin-panel').style.display='block'">⚙️ إعدادات المتجر (للتعديل)</button>
 
-    <div class="products-grid" id="productsGrid"></div>
+<div class="admin-panel">
+    <h3>إضافة صورة لمنتج موجود</h3>
+    <input type="text" id="targetName" placeholder="اكتبي اسم المنتج بالظبط">
+    <input type="text" id="targetImg" placeholder="رابط الصورة">
+    <button onclick="updateImage()">حفظ الصورة للمنتج</button>
 </div>
 
-<!-- زر الواتساب (قم بتغيير الرقم التالي إلى رقمك شامل كود الدولة بدون +) -->
-<a href="https://wa.me/201000000000" class="whatsapp-float" target="_blank" title="تواصل عبر الواتساب">
-    <i class="fab fa-whatsapp"></i>
-</a>
+<div class="grid" id="productGrid"></div>
 
 <script>
-// لإضافة صورة لمنتج مستقبلاً، ضعي مسار أو رابط الصورة مكان "" في خاصية image
-const rawProductsList = [
-    { name: "زيت الروزماري المقطر - Rosemary Essential Oil", price: 350, category: "Raw Products", inStock: true, image: "" },
-    { name: "صابون نوبي بالكركدية - Nubian Soap With Hibiscus", price: 275, category: "Skin Care", inStock: true, image: "" },
-    { name: "زيت جنين القمح - Wheat germ Oil", price: 125, category: "Raw Products", inStock: true, image: "" },
-    { name: "كريم ترطيب اليدين - Hand Cream", price: 225, category: "Skin Care", inStock: true, image: "" },
-    { name: "كيس مخده ساتان - Satin Case", price: 200, category: "Hair Care", inStock: true, image: "" },
-    { name: "مرطب القدم - Foot Balm", price: 200, category: "Skin Care", inStock: true, image: "" },
-    { name: "بادي يوجرت برائحة جوز الهند - Body Yogurt Naughty Coconut", price: 250, category: "Skin Care", inStock: true, image: "" },
-    { name: "زبدة الجسم برائحة جوز الهند - Body Butter Coconut", price: 275, category: "Skin Care", inStock: true, image: "" },
-    { name: "ماء الروزماري - Rosemary Water", price: 125, category: "Raw Products", inStock: true, image: "" },
-    { name: "مزيل عرق بدون رائحة - Unscented Deodorant", price: 250, category: "Skin Care", inStock: true, image: "" },
-    { name: "سيروم الاظافر - Nail serum", price: 200, category: "Skin Care", inStock: true, image: "" },
-    { name: "ماء النعناع - Peppermint Water", price: 100, category: "Raw Products", inStock: true, image: "" },
-    { name: "زيت القرع - Pumpkin seeds oil", price: 125, category: "Raw Products", inStock: true, image: "" },
-    { name: "زيت بذور العنب - Grapeseeds Oil", price: 225, category: "Raw Products", inStock: true, image: "" },
-    { name: "توكه ساتان - Satin Scrunchie", price: 75, category: "Hair Care", inStock: true, image: "" },
-    { name: "مشط خشبي", price: 100, category: "Hair Care", inStock: false, image: "" },
-    { name: "صابونة الاعشاب - Herbs Soap", price: 150, category: "Organic Soaps", inStock: true, image: "" },
-    { name: "بادي يوجرت برائحة الخوخ - Body Yogurt Fresh Peach", price: 250, category: "Skin Care", inStock: true, image: "" },
-    { name: "زيت السمسم - Sesame Oil", price: 120, category: "Raw Products", inStock: true, image: "" },
-    { name: "ماء الليمون - Lemon Water", price: 125, category: "Raw Products", inStock: true, image: "" },
-    { name: "زيت الكركديه - Hibiscus Oil", price: 150, category: "Raw Products", inStock: true, image: "" },
-    { name: "شامبو الاطفال - Kids Shampoo", price: 275, category: "Hair Care", inStock: true, image: "" },
-    { name: "زيت اللوز الحلو - Sweet Almond Oil", price: 150, category: "Raw Products", inStock: true, image: "" },
-    { name: "بادي يوجرت برائحة الروز فانيلا - Body Yogurt Rose Vanilla", price: 250, category: "Skin Care", inStock: true, image: "" },
-    { name: "زيت الخروع - Castor Oil", price: 120, category: "Raw Products", inStock: true, image: "" },
-    { name: "مقشر الشفاه - Lip Scrub", price: 100, category: "Lips Care", inStock: true, image: "" },
-    { name: "واقى الشمس - Sun Screen", price: 400, category: "Skin Care", inStock: false, image: "" },
-    { name: "زيت الافوكادو - Avocado Oil", price: 125, category: "Raw Products", inStock: true, image: "" },
-    { name: "زيت الارجان المغربي - Moroccan Argan Oil", price: 350, category: "Raw Products", inStock: true, image: "" },
-    { name: "فرشاة الشعر بخشب البامبو - Hair Brush", price: 250, category: "Hair Care", inStock: true, image: "" },
-    { name: "زيت القهوة - Coffee Oil", price: 150, category: "Raw Products", inStock: true, image: "" },
-    { name: "ماء اللافندر - Lavender Water", price: 125, category: "Raw Products", inStock: true, image: "" },
-    { name: "تنت كريمي - Tint Creamy", price: 175, category: "Skin Care", inStock: true, image: "" },
-    { name: "فوطه مايكروفايبر - Microfiber Towel", price: 250, category: "Hair Care", inStock: true, image: "" },
-    { name: "زبدة الشيا - Shea Butter", price: 200, category: "Raw Products", inStock: true, image: "" },
-    { name: "زيت الورد - Rose oil", price: 150, category: "Raw Products", inStock: true, image: "" },
-    { name: "زيت الجرجير - Eruca Oil", price: 120, category: "Raw Products", inStock: true, image: "" },
-    { name: "قناع الطمي الاسواني - Aswan Clay Mask", price: 250, category: "Skin Care", inStock: false, image: "" },
-    { name: "صابونة الشيا وجوز الهند - Shea and Coconut Soap", price: 150, category: "Organic Soaps", inStock: true, image: "" },
-    { name: "صابون مغربي - Moroccan Soap", price: 225, category: "Skin Care", inStock: true, image: "" },
-    { name: "مرطب الشفاه - Lip Balm", price: 125, category: "Lips Care", inStock: true, image: "" },
-    { name: "مقشر القهوه - Coffee Scrub", price: 250, category: "Skin Care", inStock: true, image: "" },
-    { name: "لوفه مغربي - Moroccan Loofah", price: 175, category: "Skin Care", inStock: true, image: "" },
-    { name: "سيرم حب الشباب - Acne Serum", price: 225, category: "Skin Care", inStock: true, image: "" },
-    { name: "الحنه النوبيه - Nubian Henna", price: 225, category: "Hair Care", inStock: true, image: "" },
-    { name: "بادي يوجرت Sexy Graffiti", price: 250, category: "Skin Care", inStock: true, image: "" },
-    { name: "صابونة الكركديه - Hibiscus Soap", price: 150, category: "Organic Soaps", inStock: false, image: "" },
-    { name: "واقى الشمس - Sun Block", price: 250, category: "Skin Care", inStock: true, image: "" },
-    { name: "زيت السعد - Cyperus Oil", price: 225, category: "Skin Care", inStock: true, image: "" },
-    { name: "زيت الجوجوبا - Jojoba Oil", price: 150, category: "Raw Products", inStock: true, image: "" },
-    { name: "صابونة الفحم - Charcoal Soap", price: 150, category: "Organic Soaps", inStock: true, image: "" },
-    { name: "صابونة القهوه - Coffee Soap", price: 150, category: "Organic Soaps", inStock: true, image: "" },
-    { name: "سيرم الهيالورونيك - Hyaluronic Acid Serum", price: 450, category: "Skin Care", inStock: true, image: "" },
-    { name: "جيل الصبار - Aleo Vera gel", price: 200, category: "Hair Care", inStock: true, image: "" },
-    { name: "كريم الكولاجين - Collagen Cream", price: 250, category: "Skin Care", inStock: true, image: "" },
-    { name: "سيرم الرموش - Eyelash Serum", price: 200, category: "Skin Care", inStock: true, image: "" },
-    { name: "بلسم الشعر - Hair Conditioner", price: 275, category: "Hair Care", inStock: true, image: "" },
-    { name: "الوصفه النوبيه - Nubian Recipe", price: 425, category: "Hair Care", inStock: true, image: "" },
-    { name: "وصفة كارما - Karma Recipe", price: 425, category: "Hair Care", inStock: true, image: "" },
-    { name: "غسول الوجه بالجزر - Facial Cleanser with Carrot", price: 250, category: "Skin Care", inStock: true, image: "" },
-    { name: "شامبو الشعر - Hair Shampoo", price: 275, category: "Hair Care", inStock: true, image: "" },
-    { name: "كريم مرطب سوفت اند جلو - Soft and glow Cream", price: 250, category: "Skin Care", inStock: true, image: "" },
-    { name: "سبراي كارما مقوي للشعر - Karma Tonic Spray200", price: 325, category: "Hair Care", inStock: true, image: "" },
-    { name: "مزيل عرق اكسترا - Extra Whitening Deodorant", price: 250, category: "Skin Care", inStock: true, image: "" },
-    { name: "سبراي كارما تونيك اكسترا - Karma Tonic Extra", price: 450, category: "Hair Care", inStock: true, image: "" },
-    { name: "مزيل عرق للتفتيح - Whitening Deodorant", price: 200, category: "Skin Care", inStock: true, image: "" },
-    { name: "تنت ملون الشفاه والخدود - Tint", price: 100, category: "Skin Care", inStock: true, image: "" }
+// قائمة المنتجات الأصلية بالأسعار
+const initialProducts = [
+    { name: "زيت الروزماري المقطر", price: 350 }, { name: "صابون نوبي بالكركدية", price: 275 },
+    { name: "زيت جنين القمح", price: 125 }, { name: "كريم ترطيب اليدين", price: 225 },
+    { name: "كيس مخده ساتان", price: 200 }, { name: "مرطب القدم", price: 200 },
+    { name: "بادي يوجرت جوز الهند", price: 250 }, { name: "زبدة الجسم جوز الهند", price: 275 },
+    { name: "ماء الروزماري", price: 125 }, { name: "مزيل عرق بدون رائحة", price: 250 },
+    { name: "سيروم الاظافر", price: 200 }, { name: "ماء النعناع", price: 100 },
+    { name: "زيت القرع", price: 125 }, { name: "زيت بذور العنب", price: 225 },
+    { name: "توكه ساتان", price: 75 }, { name: "مشط خشبي", price: 100 },
+    { name: "صابونة الاعشاب", price: 150 }, { name: "بادي يوجرت الخوخ", price: 250 },
+    { name: "زيت السمسم", price: 120 }, { name: "ماء الليمون", price: 125 },
+    { name: "زيت الكركديه", price: 150 }, { name: "شامبو الاطفال", price: 275 },
+    { name: "زيت اللوز الحلو", price: 150 }, { name: "بادي يوجرت روز فانيلا", price: 250 },
+    { name: "زيت الخروع", price: 120 }, { name: "مقشر الشفاه", price: 100 },
+    { name: "واقى الشمس", price: 400 }, { name: "زيت الافوكادو", price: 125 },
+    { name: "زيت الارجان المغربي", price: 350 }, { name: "فرشاة الشعر بامبو", price: 250 },
+    { name: "زيت القهوة", price: 150 }, { name: "ماء اللافندر", price: 125 },
+    { name: "تنت كريمي", price: 175 }, { name: "فوطه مايكروفايبر", price: 250 },
+    { name: "زبدة الشيا", price: 200 }, { name: "زيت الورد", price: 150 },
+    { name: "زيت الجرجير", price: 120 }, { name: "قناع الطمي الاسواني", price: 250 },
+    { name: "صابونة الشيا وجوز الهند", price: 150 }, { name: "صابون مغربي", price: 225 },
+    { name: "مرطب الشفاه", price: 125 }, { name: "مقشر القهوه", price: 250 },
+    { name: "لوفه مغربي", price: 175 }, { name: "سيرم حب الشباب", price: 225 },
+    { name: "الحنه النوبيه", price: 225 }, { name: "بادي يوجرت Sexy Graffiti", price: 250 },
+    { name: "صابونة الكركديه", price: 150 }, { name: "واقى الشمس Sun Block", price: 250 },
+    { name: "زيت السعد", price: 225 }, { name: "زيت الجوجوبا", price: 150 },
+    { name: "صابونة الفحم", price: 150 }, { name: "صابونة القهوه", price: 150 },
+    { name: "سيرم الهيالورونيك", price: 450 }, { name: "جيل الصبار", price: 200 },
+    { name: "كريم الكولاجين", price: 250 }, { name: "سيرم الرموش", price: 200 },
+    { name: "بلسم الشعر", price: 275 }, { name: "الوصفه النوبيه", price: 425 },
+    { name: "وصفة كارما", price: 425 }, { name: "غسول الوجه بالجزر", price: 250 },
+    { name: "شامبو الشعر", price: 275 }, { name: "كريم مرطب سوفت اند جلو", price: 250 },
+    { name: "سبراي كارما مقوي للشعر", price: 325 }, { name: "مزيل عرق اكسترا", price: 250 },
+    { name: "سبراي كارما تونيك اكسترا", price: 450 }, { name: "مزيل عرق للتفتيح", price: 200 },
+    { name: "تنت ملون الشفاه والخدود", price: 100 }
 ];
 
-function removeDuplicates(products) {
-    const uniqueMap = new Map();
-    products.forEach(product => {
-        const normalizedName = product.name.trim().toLowerCase();
-        if (!uniqueMap.has(normalizedName)) {
-            uniqueMap.set(normalizedName, product);
-        }
-    });
-    return Array.from(uniqueMap.values());
+let products = JSON.parse(localStorage.getItem('myStore')) || initialProducts;
+
+function render() {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = products.map(p => `
+        <div class="card">
+            ${p.image ? `<img src="${p.image}">` : `<div style="height:180px; background:#eee; display:flex; align-items:center; justify-content:center;">بدون صورة</div>`}
+            <h3>${p.name}</h3>
+            <p class="price">${p.price} EGP</p>
+        </div>
+    `).join('');
 }
 
-const productsList = removeDuplicates(rawProductsList);
-
-function displayProducts(products) {
-    const grid = document.getElementById('productsGrid');
-    grid.innerHTML = '';
-
-    products.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        
-        const statusClass = product.inStock ? 'in-stock' : 'out-of-stock';
-        const statusText = product.inStock ? 'متوفر' : 'غير متوفر';
-
-        // إضافة الصورة فقط إذا كان هناك رابط أو مسار مخصص لها
-        const imageHTML = (product.image && product.image.trim() !== "") 
-            ? `<div class="product-image-wrapper">
-                 <img src="${product.image}" alt="${product.name}" class="product-image">
-               </div>`
-            : '';
-
-        card.innerHTML = `
-            <span class="status-badge ${statusClass}">${statusText}</span>
-            ${imageHTML}
-            <div class="product-info">
-                <div>
-                    <div class="product-category">${product.category}</div>
-                    <div class="product-title">${product.name}</div>
-                </div>
-                <div class="product-price">${product.price} EGP</div>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
-}
-
-function filterProducts(category) {
-    const buttons = document.querySelectorAll('.filter-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-
-    if (category === 'all') {
-        displayProducts(productsList);
+function updateImage() {
+    const name = document.getElementById('targetName').value;
+    const img = document.getElementById('targetImg').value;
+    const prod = products.find(p => p.name === name);
+    if(prod) {
+        prod.image = img;
+        localStorage.setItem('myStore', JSON.stringify(products));
+        render();
     } else {
-        const filtered = productsList.filter(p => p.category === category);
-        displayProducts(filtered);
+        alert("الاسم غير موجود، تأكدي من كتابته بدقة");
     }
 }
 
-displayProducts(productsList);
+render();
 </script>
-
 </body>
 </html>
