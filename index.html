@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ashry by سَمَا | قائمة المنتجات</title>
+    <!-- استدعاء أيقونات FontAwesome لعلامة الواتساب -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #d81b60;
@@ -13,6 +15,7 @@
             --card-bg: #ffffff;
             --text-color: #212529;
             --out-of-stock: #e63946;
+            --whatsapp-color: #25d366;
         }
 
         body {
@@ -160,6 +163,33 @@
             background-color: rgba(255, 235, 238, 0.9);
             color: #c62828;
         }
+
+        /* زر الواتساب العائم */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 25px;
+            right: 25px;
+            background-color: var(--whatsapp-color);
+            color: #fff;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 32px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            color: #fff;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -181,7 +211,13 @@
     <div class="products-grid" id="productsGrid"></div>
 </div>
 
+<!-- زر الواتساب (قم بتغيير الرقم التالي إلى رقمك شامل كود الدولة بدون +) -->
+<a href="https://wa.me/201000000000" class="whatsapp-float" target="_blank" title="تواصل عبر الواتساب">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
 <script>
+// لإضافة صورة لمنتج مستقبلاً، ضعي مسار أو رابط الصورة مكان "" في خاصية image
 const rawProductsList = [
     { name: "زيت الروزماري المقطر - Rosemary Essential Oil", price: 350, category: "Raw Products", inStock: true, image: "" },
     { name: "صابون نوبي بالكركدية - Nubian Soap With Hibiscus", price: 275, category: "Skin Care", inStock: true, image: "" },
@@ -276,6 +312,7 @@ function displayProducts(products) {
         const statusClass = product.inStock ? 'in-stock' : 'out-of-stock';
         const statusText = product.inStock ? 'متوفر' : 'غير متوفر';
 
+        // إضافة الصورة فقط إذا كان هناك رابط أو مسار مخصص لها
         const imageHTML = (product.image && product.image.trim() !== "") 
             ? `<div class="product-image-wrapper">
                  <img src="${product.image}" alt="${product.name}" class="product-image">
